@@ -17,7 +17,7 @@ unsigned long FileReader::lineNo = 0;
 InputReaderResult *FileReader::read(std::string path){
     FileReader::lineNo = 0;
     std::ifstream stream;
-    int from, to;
+    unsigned long from, to;
     
     stream.open(path);
     
@@ -36,11 +36,11 @@ InputReaderResult *FileReader::read(std::string path){
     readRoads(stream, cities, true);
     printf("\n");
     
-    stream >> from;
-    printf("Starting city: %d\n", from);
+    from = FileReader::readUL(stream, true);
+    printf("Starting city: %lu\n", from);
     
-    stream >> to;
-    printf("Ending city: %d\n", to);
+    to = FileReader::readUL(stream, true);
+    printf("Ending city: %lu\n", to);
     
     stream.close();
     
@@ -55,11 +55,11 @@ InputReaderResult *FileReader::read(std::string path){
 Road* FileReader::readRoad(std::ifstream& stream, bool optional, long unsigned numCities){
     unsigned long to, from, length, cityLimit = numCities - 1;
     
-    from = FileReader::readInt(stream, false);
+    from = FileReader::readUL(stream, false);
     stream.get();
-    to = FileReader::readInt(stream, false);
+    to = FileReader::readUL(stream, false);
     stream.get();
-    length = FileReader::readInt(stream, true);
+    length = FileReader::readUL(stream, true);
     
     if (from > cityLimit || to > cityLimit) {
         InputReader::throwException("Values for 'fromCity' and 'toCity' must be unique integers between 0 and %lu inclusive.", cityLimit);
@@ -75,12 +75,12 @@ Road* FileReader::readRoad(std::ifstream& stream, bool optional, long unsigned n
 }
 
 std::map<unsigned long, City*> FileReader::readCities(std::ifstream& stream){
-    int numCities;
+    unsigned long numCities;
     std::map<unsigned long, City*> cities;
     
-    stream >> numCities;
+    numCities = FileReader::readUL(stream, true);
     
-    printf("Reading %d cities.\n", numCities);
+    printf("Reading %lu cities.\n", numCities);
     
     for (int i = 0; i < numCities; i++) {
         City* tempCity = new City(i);
@@ -95,10 +95,10 @@ std::map<unsigned long, City*> FileReader::readCities(std::ifstream& stream){
 
 void FileReader::readRoads(std::ifstream& stream, std::map<unsigned long, City*> cities, bool optional){
     Road *temp;
-    int numRoads;
+    unsigned long numRoads;
     const char* optionalText = FileReader::getOptionalText(optional);
-    stream >> numRoads;
-    printf("Reading %d uni-directional roads.\n", numRoads);
+    numRoads = FileReader::readUL(stream, true);
+    printf("Reading %lu uni-directional roads.\n", numRoads);
     
     for(int i = 0; i < numRoads; i++){
         temp = readRoad(stream, false, cities.size());
@@ -110,8 +110,8 @@ void FileReader::readRoads(std::ifstream& stream, std::map<unsigned long, City*>
     printf("Done reading %s uni-directional roads.\n", optionalText);
 }
 
-int FileReader::readInt(std::ifstream &stream, bool newline){
-    int output;
+unsigned long FileReader::readUL(std::ifstream &stream, bool newline){
+    unsigned long output;
     stream >> output;
     
     if (newline) {

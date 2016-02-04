@@ -25,7 +25,7 @@ private:
     static void readRoads(std::ifstream& stream, std::map<unsigned long, City *> cities, bool optional);
     static Road* readRoad(std::ifstream& stream, bool optional, long unsigned numCities);
     static std::map<unsigned long, City*> readCities(std::ifstream& stream);
-    static int readInt(std::ifstream &stream, bool newline);
+    static unsigned long readUL(std::ifstream &stream, bool newline);
     
 public:
     static InputReaderResult *read(std::string path);
