@@ -19,7 +19,6 @@
 class FibHeap{
 private:
     void _linkRoots();
-    Node *_find(Item *item);
     static FibHeap *_meld(FibHeap *first, FibHeap *second);
     
 public:

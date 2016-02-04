@@ -72,31 +72,6 @@ void FibHeap::decreaseKey(int delta, Item *item, FibHeap *heap){
  Private
  */
 
-Node *FibHeap::_find(Item *item){
-    Node *currNode = this->min, *startNode = currNode;
-    bool found = false;
-    
-    do{
-        if (item == currNode->item){
-            found = true;
-        }
-        else if (currNode->key() <= item->key) {
-            currNode = currNode->right;
-        }
-        else{
-            currNode = currNode->child;
-            startNode = currNode;
-        }
-    }while(!found && startNode != currNode);
-    
-    if(!found){
-        return nullptr;
-    }
-    else{
-        return currNode;
-    }
-}
-
 void FibHeap::_linkRoots(){
     unsigned long minValue = INT_MAX;
     bool update;
