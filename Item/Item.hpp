@@ -11,8 +11,8 @@
 
 #include <stdio.h>
 
-struct Item{
-    //priority of element smaller = higher priority
+class Item{
+public:
     int key;
     
     Item(int key);
