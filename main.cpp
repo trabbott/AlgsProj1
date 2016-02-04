@@ -8,10 +8,14 @@
 
 #include "FibHeap.hpp"
 #include "FileReader.hpp"
+#include "CommandLineReader.hpp"
 
 int main(int argc, char *argv[]){
-    /* FibHeap Tests
-     
+    /* 
+     FibHeap Tests
+     */
+    
+    /*
     FibHeap *heap1 = new FibHeap();
     
     FibHeap::insert(new Item(10), heap1);
@@ -34,6 +38,13 @@ int main(int argc, char *argv[]){
     /*
      Input File Reading Tests
      */
+    /*
     std::string filename = "/Volumes/Files/gregorymoon/Google Drive/School/2015-2016/Spring 2016/CSE 591 - Foundations of Algorithms/programming assignment/1/dijkstra/dijkstra/inputs/input-1.txt";
-    FileReaderResult *result = FileReader::read(filename);
+    InputReaderResult *result = FileReader::read(filename);
+     */
+     
+    /*
+     Command Line Reading Tests
+     */
+    CommandLineReader::read();
 }

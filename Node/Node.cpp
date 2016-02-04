@@ -93,6 +93,6 @@ void Node::_linkChildren(){
     }
 }
 
-int Node::key(){
+unsigned long Node::key(){
     return this->item->key;
 }

@@ -8,7 +8,7 @@
 
 #include "Item.hpp"
 
-Item::Item(int key){
+Item::Item(unsigned long key){
     this->key = key;
 }
 

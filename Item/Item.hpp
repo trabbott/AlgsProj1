@@ -13,9 +13,9 @@
 
 class Item{
 public:
-    int key;
+    unsigned long key;
     
-    Item(int key);
+    Item(unsigned long key);
 };
 
 #endif /* Item_hpp */

@@ -23,7 +23,7 @@ public:
     Node(Item *item);
     
     void addChild(Node *child);
-    int key();
+    unsigned long key();
     static Node *link(Node *first, Node *second);
     
 private:

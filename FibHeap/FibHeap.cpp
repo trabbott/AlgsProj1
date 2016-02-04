@@ -98,9 +98,9 @@ Node *FibHeap::_find(Item *item){
 }
 
 void FibHeap::_linkRoots(){
-    int minValue = INT_MAX;
+    unsigned long minValue = INT_MAX;
     bool update;
-    std::map<int, Node *> rankMap;
+    std::map<unsigned long, Node *> rankMap;
     Node *currNode = this->min;
     
     if(currNode != nullptr){

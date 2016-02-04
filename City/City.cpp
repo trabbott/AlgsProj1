@@ -8,4 +8,4 @@
 
 #include "City.hpp"
 
-City::City(int key) : Item(key){}
+City::City(unsigned long key) : Item(key){}

@@ -18,7 +18,7 @@ class City : Item{
 public:
     std::vector<Road *> roads;
     
-    City(int key);
+    City(unsigned long key);
 };
 
 #endif /* City_hpp */
