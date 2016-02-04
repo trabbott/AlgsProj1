@@ -6,7 +6,6 @@
 //  Copyright © 2016 Gregory Moon. All rights reserved.
 //
 
-#include "Edge.hpp"
 #include "Item.hpp"
 
 Item::Item(int key){

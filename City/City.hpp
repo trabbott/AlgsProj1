@@ -11,12 +11,12 @@
 
 #include <vector>
 
-#include "Edge.hpp"
+#include "Road.hpp"
 #include "Item.hpp"
 
 class City : Item{
 public:
-    std::vector<Edge *> roads;
+    std::vector<Road *> roads;
     
     City(int key);
 };

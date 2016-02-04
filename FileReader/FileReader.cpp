@@ -62,7 +62,7 @@ FileReaderResult *FileReader::read(std::string path){
  Private 
  */
 
-static Edge* readRoad(std::ifstream& stream, bool optional){
+static Road* readRoad(std::ifstream& stream, bool optional){
     int toId, fromId, length;
     
     stream >> fromId;
@@ -71,7 +71,7 @@ static Edge* readRoad(std::ifstream& stream, bool optional){
     stream.get();
     stream >>length;
     
-    return new Edge(fromId, toId, length, optional);
+    return new Road(fromId, toId, length, optional);
 }
 
 std::map<int, City*> FileReader::readCities(std::ifstream& stream){
@@ -98,7 +98,7 @@ void FileReader::readExistingRoads(std::ifstream& stream, std::map<int, City*> c
     printf("Reading %d uni-directional roads.\n", numRoads);
     
     for(int i = 0; i < numRoads; i++){
-        Edge* tempRoad = readRoad(stream, false);
+        Road* tempRoad = readRoad(stream, false);
         cities[tempRoad->from]->roads.push_back(tempRoad);
         
         printf("\tReading existing road from city %d to city %d with length of %d\n", tempRoad->from, tempRoad->to, tempRoad->length);
@@ -113,7 +113,7 @@ void FileReader::readPotentialRoads(std::ifstream& stream, std::map<int, City*> 
     printf("Reading %d potential uni-directional roads.\n", numRoads);
     
     for(int i = 0; i < numRoads; i++){
-        Edge* tempRoad = readRoad(stream, true);
+        Road* tempRoad = readRoad(stream, true);
         cities[tempRoad->from]->roads.push_back(tempRoad);
         
         printf("\tReading potential road from city %d to city %d with length of %d\n", tempRoad->from, tempRoad->to, tempRoad->length);

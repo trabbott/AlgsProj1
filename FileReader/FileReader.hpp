@@ -13,7 +13,7 @@
 #include <map>
 #include <string>
 
-#include "Edge.hpp"
+#include "Road.hpp"
 #include "City.hpp"
 
 class FileReaderResult{
