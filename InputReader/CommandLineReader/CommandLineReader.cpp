@@ -38,17 +38,22 @@ void CommandLineReader::promptRoadDetails(unsigned long numRoads, std::map<unsig
     
     printf("\tEnter the details for each road (fromCity:toCity:length):\n");
     
-    for (int i = 1; i <= numRoads; i++) {
+    for (int i = 0; i < numRoads; i++) {
         printf("\t\tRoad %d: ", i);
         
         unsigned long from, to, length;
+        CommandLineReader::cleanBuffer();
         scanf("%lu:%lu:%lu", &from, &to, &length);
         
         try{
+            if(from > cityLimit || to > cityLimit){
+                throw std::invalid_argument("");
+            }
+            
             temp = new Road(to, from, length, optional);
         }
         catch(std::invalid_argument& e){
-            InputReader::logError("Values for 'fromCity' and 'toCity' must be unique integers between 0 and %lu inclusive.\nValue for 'length' must be a positive integer.", cityLimit);
+            InputReader::logError("Values for 'fromCity' and 'toCity' must be unique integers between 0 and %lu inclusive and the value for 'length' must be a positive integer.", cityLimit);
             i--;
             continue;
         }
@@ -65,6 +70,7 @@ std::map<unsigned long, City *> CommandLineReader::promptCities(){
     
     do{
         printf("How many cities are in your graph?: ");
+        CommandLineReader::cleanBuffer();
         scanf("%d", &numCities);
         
         if(numCities < 2){
@@ -87,6 +93,7 @@ unsigned long CommandLineReader::promptRoads(bool optional){
     const char *optionalText = CommandLineReader::getOptionalText(optional);
     
     printf("How many %s roads are in your graph?: ", optionalText);
+    CommandLineReader::cleanBuffer();
     scanf("%lu", &numRoads);
     printf("\t%lu %s roads (0 - %lu) are being added.\n\n", numRoads, optionalText, numRoads - 1);
     
@@ -98,6 +105,7 @@ unsigned long CommandLineReader::promptLimit(unsigned long numCities, bool start
     
     do{
         printf("What city do you want to %s in?: ", start ? "start" : "end");
+        CommandLineReader::cleanBuffer();
         scanf("%lu", &ret);
         
         if(ret > cityLimit){
@@ -107,4 +115,9 @@ unsigned long CommandLineReader::promptLimit(unsigned long numCities, bool start
     
     printf("\t%sing city: %lu\n\n", start ? "Start" : "End", ret);
     return ret;
+}
+
+void CommandLineReader::cleanBuffer(){
+    char garbage[4096];
+    fgets(garbage, sizeof(garbage)/sizeof(char), stdin);
 }

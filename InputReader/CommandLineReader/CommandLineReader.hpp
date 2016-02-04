@@ -10,6 +10,7 @@
 #define CommandLineReader_hpp
 
 #include <cstdio>
+#include <stdexcept>
 #include <map>
 
 #include "City.hpp"
@@ -19,6 +20,7 @@
 class CommandLineReader : InputReader{
 public:
     static InputReaderResult *read();
+    static void cleanBuffer();
 private:
     static std::map<unsigned long, City *> promptCities();
     static unsigned long promptRoads(bool optional);
