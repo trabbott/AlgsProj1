@@ -9,14 +9,14 @@
 #ifndef Road_hpp
 #define Road_hpp
 
-#include <stdio.h>
+#include <stdexcept>
 
 class Road{
 public:
-    int to, from, length;
+    unsigned long to, from, length;
     bool optional;
     
-    Road(int to, int from, int length, int optional);
+    Road(unsigned long to, unsigned long from, unsigned long length, unsigned long optional);
 };
 
 #endif /* Road_hpp */
