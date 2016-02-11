@@ -13,9 +13,11 @@
 #include <vector>
 
 #include "Road.hpp"
+struct BackPointer;
 
 class City{
 public:
+    BackPointer *mand, *opt;
     std::vector<Road *> roads;
     unsigned long key;
     bool visited;
@@ -23,6 +25,16 @@ public:
 
 
     City(unsigned long key);
+};
+
+struct BackPointer{
+    unsigned long value;
+    City *prev;
+    
+    BackPointer(){
+        value = ULONG_MAX;
+        prev = nullptr;
+    }
 };
 
 #endif /* Item_hpp */

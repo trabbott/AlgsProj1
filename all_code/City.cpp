@@ -13,5 +13,8 @@ City::City(unsigned long key){
 
     this->visited = false;
     this->distance = ULONG_MAX;
+    
+    this->mand = new BackPointer();
+    this->opt = new BackPointer();
 }
 

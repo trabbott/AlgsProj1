@@ -6,6 +6,7 @@
 //  Copyright © 2016 Gregory Moon. All rights reserved.
 //
 
+#include <climits>
 #include <string>
 #include <map>
 
@@ -81,12 +82,69 @@ int main(int argc, char *argv[]){
     /*
      Input File Reading Tests
      */
-    std::string filename = "/Volumes/Files/gregorymoon/Google Drive/School/2015-2016/Spring 2016/CSE 591 - Foundations of Algorithms/programming assignment/1/dijkstra/dijkstra/inputs/input-2.txt";
+    std::string filename = "/Volumes/Files/gregorymoon/Google Drive/School/2015-2016/Spring 2016/CSE 591 - Foundations of Algorithms/programming assignment/1/dijkstra/dijkstra/inputs/input-1.txt";
     InputReaderResult *result = FileReader::read(filename);
     
     std::map<unsigned long, City *> path = Dijkstra::run(result);
     std::vector<unsigned long> output;
+    
+    std::vector<unsigned long> mandPath, optPath;
     unsigned long currKey = path[result->to]->key;
+    City *currCity = result->cities[result->to];
+    unsigned long mandLength = currCity->mand->value, optLength = currCity->opt->value;
+    
+    
+    do{
+        mandPath.push_back(currCity->key);
+        currCity = currCity->mand->prev;
+    }while(currCity != result->cities[result->from]);
+    
+    mandPath.push_back(currCity->key);
+    
+    while(mandPath.size() > 0){
+        if(mandPath.size() > 1){
+            printf("%lu -> ", mandPath.back());
+        }
+        else{
+            printf("%lu with a length of: %lu\n", mandPath.back(), mandLength);
+        }
+        
+        mandPath.pop_back();
+    }
+    
+    currCity = result->cities[result->to];
+    
+    if(optLength == ULONG_MAX){
+        printf("No Optional Road can make the path faster.\n");
+    }
+    else{
+        do{
+            optPath.push_back(currCity->key);
+            
+            if(currCity->opt->prev->opt->value == ULONG_MAX){
+                currCity = currCity->mand->prev;
+            }
+            else{
+                currCity = currCity->opt->prev;
+            }
+        }while(currCity != result->cities[result->from]);
+        
+        optPath.push_back(currCity->key);
+        
+        while(optPath.size() > 0){
+            if(optPath.size() > 1){
+                printf("%lu -> ", optPath.back());
+            }
+            else{
+                printf("%lu with a length of: %lu\n", optPath.back(), optLength);
+            }
+            
+            optPath.pop_back();
+        }
+    }
+    
+    
+    /*
     output.push_back(result->to);
     
     do{
@@ -106,6 +164,7 @@ int main(int argc, char *argv[]){
         
         output.pop_back();
     }
+     */
     
     
     /*

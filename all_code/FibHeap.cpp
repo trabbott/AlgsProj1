@@ -102,34 +102,6 @@ If the new key of i is smaller than the key of the minimum node,
 
 This method works because A is nonnegative; decreasing the key of i preserves heap order within the subtree rooted at x, though it may violate heap order between x and its parent. A decrease key operation takes 0( 1) actual time.
 */
-/*
-void FibHeap::decreaseKey(int delta, Node *node, FibHeap *heap)
-{
-    node->item->key -= delta;
-    
-    if(node->parent != nullptr){
-        if(node->parent->child == node){
-            if(node->right != node){
-                node->parent->child = node->right;
-            }
-            else{
-                node->parent->child = nullptr;
-            }
-        }
-        
-        node->parent->rank--;
-
-        node->left->right = node->right;
-        node->right->left = node->left;
-        
-        node->parent = nullptr;
-        node->left = nullptr;
-        node->right = nullptr;
-        
-        FibHeap::insert(node, heap);
-    }
-}
- */
 void FibHeap::decreaseKey(unsigned long delta, Node *node, FibHeap *heap)
 {
     Node* parent = node->parent;
@@ -217,39 +189,6 @@ void FibHeap::_cut(Node *node, FibHeap *heap)
             // Recursivly act on its parent node in same fassion
         }
     }
-}
-
-void FibHeap::deleteNode(Node *node, FibHeap *heap)
-{
-    if(node == heap->min){
-        FibHeap::deleteMin(heap);
-        return;
-    }
-    
-    node->left->right = node->right;
-    node->right->left = node->left;
-    
-    if (node->parent != nullptr)
-    {
-        node->parent->rank--;
-
-        if(node->left == node)     // IE node is an only child
-        {       
-            node->parent->child = nullptr;
-        }
-        else if (node->parent->child == node)
-        {
-            node->parent->child = node->right;
-        }
-    }
-    
-    if(node->child != nullptr){
-        node->child->right = heap->min->right;
-        node->child->left = heap->min;
-        node->child->parent = nullptr;
-    }
-    
-    heap->_linkRoots();
 }
 
 void FibHeap::_linkRoots()

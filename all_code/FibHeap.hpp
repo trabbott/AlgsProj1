@@ -30,7 +30,6 @@ public:
     FibHeap();
     FibHeap(Node *min);
     
-    static void deleteNode(Node *node, FibHeap *heap);
     static void decreaseKey(unsigned long delta, Node *node, FibHeap *heap);
     static Node *findMin(FibHeap *heap);
     static Node *insert(Node *node, FibHeap *heap);

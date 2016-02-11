@@ -13,6 +13,7 @@
 
 #include "City.hpp"
 
+
 class Node{
 public:
     Node *parent, *child, *left, *right;
@@ -31,5 +32,6 @@ public:
 private:
     void _linkChildren();
 };
+
 
 #endif /* Node_hpp */

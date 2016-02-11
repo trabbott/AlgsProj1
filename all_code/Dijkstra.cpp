@@ -39,6 +39,8 @@ std::map<unsigned long, City *> Dijkstra::run(InputReaderResult *params)
     
     //dist[source] ← 0
     cities[params->from]->distance = 0;
+    cities[params->from]->mand->value = 0;
+    cities[params->from]->opt->value = 0;
     
     //create vertex set Q
     
@@ -65,7 +67,6 @@ std::map<unsigned long, City *> Dijkstra::run(InputReaderResult *params)
             Road *road = *it;
             
             if(road->optional){
-                continue;
             }
             
             City *neighbor = cities[road->to];
@@ -85,8 +86,52 @@ std::map<unsigned long, City *> Dijkstra::run(InputReaderResult *params)
                     
                     //dist[v] ← alt
                     FibHeap::decreaseKey(sub, cityNodes[neighbor->key], heap);
+                    
+                    if(road->optional){
+                        //If no optional road has been built on this path yet
+                        if(minItem->opt->value == ULONG_MAX){
+                            
+                            unsigned long newVal;
+                            
+                            if(minItem->opt->value == ULONG_MAX){
+                                newVal = road->length + minItem->mand->value;
+                            }else{
+                                newVal = road->length + minItem->opt->value;
+                            }
+                            
+                            
+                            if(neighbor->opt->value > newVal){
+                                neighbor->opt->value = newVal;
+                                neighbor->opt->prev = minItem;
+                            }
+                        }
+                    }
+                    else{
+                        unsigned long newVal = road->length + minItem->mand->value ;
+                        
+                        if(neighbor->mand->value > newVal){
+                            neighbor->mand->value = newVal;
+                            neighbor->mand->prev = minItem;
+                        }
+                        
+                        //If not optional road has been built to this neighbor yet
+                        if (neighbor->opt->value == ULONG_MAX) {
+                            //If no optional road has been built along this path yet and we are not at the starting node.
+                            if(minItem->opt->value != ULONG_MAX && minItem->distance != 0){
+                                neighbor->opt->value = road->length + minItem->opt->value;
+                                neighbor->opt->prev = minItem;
+                            }
+                        }
+                        else{
+                            newVal = road->length + minItem->opt->value;
+                            
+                            if(newVal < neighbor->opt->value){
+                                neighbor->opt->value = newVal;
+                                neighbor->opt->prev = minItem;
+                            }
+                        }
+                    }
                 }
-
             }
         }
         

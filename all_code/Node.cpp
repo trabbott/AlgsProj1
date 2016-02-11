@@ -15,6 +15,7 @@ Node::Node(City *city){
     this->left = this;
     this->right = this;
     this->parent = nullptr;
+    
 }
 
 Node *Node::link(Node *first, Node *second){
@@ -91,6 +92,8 @@ void Node::_linkChildren(){
 }
 
 unsigned long Node::distance(){
+   // return std::max(this->item->opt->value, this->item->mand->value);
+    
     return this->item->distance;
 }
 
