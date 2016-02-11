@@ -1,0 +1,288 @@
+//
+//  FibHeap.cpp
+//  dijkstra
+//
+//  Created by Gregory Moon on 1/31/16.
+//  Copyright © 2016 Gregory Moon. All rights reserved.
+//
+
+#include "FibHeap.hpp"
+
+int nullptr = 0;
+
+/*
+ Public
+ */
+
+// Constructor
+FibHeap::FibHeap(){
+    this->min = nullptr;
+}
+
+FibHeap::FibHeap(Node *min)
+{
+    this->min = min;
+}
+
+
+Node *FibHeap::findMin(FibHeap *heap)
+{
+    return heap->min;
+}
+
+
+void FibHeap::insert(Item *item, FibHeap *heap)
+{
+    FibHeap::insert(new Node(item), heap);
+}
+
+void FibHeap::insert(Node *node, FibHeap *heap)
+{
+    if (heap->min == nullptr) 
+    {
+        heap->min = node;
+    }
+    else
+    {
+        *heap = *FibHeap::_meld(heap, new FibHeap(node));
+    }
+}
+
+Item *FibHeap::deleteMin(FibHeap *heap)
+{
+    Node *currChild = heap->min->child;
+    Item *ret = heap->min->item;
+    
+    if(heap->min->right == heap->min)
+    {
+        heap->min = nullptr;
+    }
+    else
+    {
+        heap->min->right->left = heap->min->left;
+        heap->min->left->right = heap->min->right;
+        heap->min = heap->min->right;
+    }
+    
+    Node *firstChild = currChild;
+    
+    if (currChild != nullptr) 
+    {
+        do
+        {
+            currChild->parent = nullptr;
+            FibHeap::insert(currChild, heap);
+            currChild = currChild->right;
+        } while (currChild != firstChild);
+    }
+    
+    heap->_linkRoots();
+    
+    return ret;
+}
+
+/*
+We implement decrease key and delete as follows:
+To cary out decrease key (A, i, h), 
+we subtract A from the key of i, 
+find the node x containing i, 
+and cut the edge joining x to its parent p(x). 
+
+This requires removing x from the list of children of p(x) 
+and making the parent pointer of x null. 
+The effect of the cut is to make the subtree rooted at x into a new tree of h, 
+and requires decreasing the rank of p(x) 
+and adding x to the list of roots of h. 
+
+(If x is originally a root, 
+    we carry out decrease key (A, i, h) merely by subtracting A from the key of i.) 
+If the new key of i is smaller than the key of the minimum node, 
+    we redefine the minimum node to be x. 
+
+This method works because A is nonnegative; decreasing the key of i preserves heap order within the subtree rooted at x, though it may violate heap order between x and its parent. A decrease key operation takes 0( 1) actual time.
+*/
+void FibHeap::decreaseKey(int delta, Node *node, FibHeap *heap)
+{
+    Node* parent = node->parent;
+
+    node->item->key -= delta;       // Might want to trap an error where (key - delta) < 0
+
+    if (parent == null || parent->item->key <= node->item->key)
+    {
+        return; // Don't need to do anything. Node is already root or does not beak the heap
+    }
+
+    _cut(node, heap)
+}
+
+/*
+ Private
+ */
+void FibHeap::_cut(Node *node, FibHeap *heap)
+{
+    Node* originalParent = node->parent;
+
+    if (originalParent != nullptr)
+    {
+        originalParent->item->rank -= 1;
+
+        /* Cut off pointers to node. */
+        // Left
+        Node* originalLeft = node->left;
+        originalLeft->right = node->right;
+
+        // Right
+        Node* originalRight = node->right;
+        originalRight->left = node->left; 
+
+        // Parent
+        if(originalLeft == node)     // IE node is an only child
+        {       
+            originalParent->child = nullptr;
+        }
+        else if (originalParent->child = node)      // IE parent points to child we are removing
+        {
+            originalParent->child = node->right;
+        }
+
+        /* Hoist node to root */ //I'm using the sibling pointers of min to track all root items.
+
+        node->parent = nullptr;  // Is null how we denote root level?
+
+        Node* rMin = min->right;
+
+        min->right = node;
+        node->right = rMin;
+
+        rMin->left = node;
+        node->left = min;
+
+
+        if (min->item->key > node->item->key)
+        {
+            min = node;    
+        }
+        // Is there a data structure that keeps track of what is in root? 
+        // If so, add this node to root.
+    
+        // Cascade markings of original parent and _cut if needed.    
+        if(originalParent->mark == false)
+        {
+            originalParent->mark = true;
+        }
+        else
+        {
+            originalParent->mark = false;
+            originalParent->rank -= 1;            
+            _cut(originalParent);
+            
+            // Set parent->mark to false
+            // Null child pointer
+            // Move parent to root
+            // Recursivly act on its parent node in same fassion
+        }
+    }
+}
+
+/*
+Node* FibHeap::_find(Item *item)
+{
+    Node *currNode = this->min, *startNode = currNode;
+    bool found = false;
+    
+    do
+    {
+        if (item == currNode->item)
+        {
+            found = true;
+        }
+        else if (currNode->key() <= item->key) 
+        {
+            currNode = currNode->right;
+        }
+        else
+        {
+            currNode = currNode->child;
+            startNode = currNode;
+        }
+
+    } while(!found && startNode != currNode);
+    
+    if(!found)
+    {
+        return nullptr;
+    }
+    else
+    {
+        return currNode;
+    }
+}
+*/
+
+void FibHeap::_linkRoots()
+{
+    unsigned long minValue = INT_MAX;
+    bool update;
+    std::map<unsigned long, Node *> rankMap;
+    Node *currNode = this->min;
+    
+    if(currNode != nullptr)
+{
+        do
+        {
+            update = false;
+            
+            if (minValue > currNode->key()) 
+            {
+                minValue = currNode->key();
+                this->min = currNode;
+            }
+            
+            if (rankMap[currNode->rank] == nullptr) 
+            {
+                update = true;
+                rankMap[currNode->rank] = currNode;
+            }
+            else if(rankMap[currNode->rank] != currNode)
+            {
+                update = true;
+                
+                while(rankMap[currNode->rank] != nullptr && rankMap[currNode->rank] != currNode)
+                {
+                    currNode = Node::link(rankMap[currNode->rank], currNode);
+                    rankMap[currNode->rank - 1] = nullptr;
+                }
+                
+                rankMap[currNode->rank] = currNode;
+            }
+            currNode = currNode->right;
+        } while ( update );
+    }
+}
+
+FibHeap *FibHeap::_meld(FibHeap *first, FibHeap *second)
+{
+    FibHeap *a, *b;
+    
+    if (first->min->key() < second->min->key()) 
+    {
+        a = first;
+        b = second;
+    }
+    else
+    {
+        a = second;
+        b = first;
+    }
+    
+    Node *temp = b->min->left;
+    
+    a->min->left->right = b->min;
+    b->min->left = a->min->left;
+    
+    temp->right = a->min;
+    a->min->left = temp;
+    
+    return a;
+}
+
