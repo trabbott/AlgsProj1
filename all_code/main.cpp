@@ -7,10 +7,13 @@
 //
 
 #include <string>
+#include <map>
 
+#include "CommandLineReader.hpp"
+#include "Dijkstra.hpp"
 #include "FibHeap.hpp"
 #include "FileReader.hpp"
-#include "CommandLineReader.hpp"
+#include "InputReader.hpp"
 
 static void showUsage();
 static std::map<std::string, std::string> getParameters(int argc, char *argv[]);
@@ -20,7 +23,8 @@ int main(int argc, char *argv[]){
      Command Line Parsing
      
      Would like to use getopt but it's not necessarily as cross-platform friendly as doing it a simpler/less effective way. The getParameters/showUsage functions should be fine for our purposes though.
-     */
+    */
+    /*
     InputReaderResult *input;
     
     if(argc < 2){
@@ -36,6 +40,7 @@ int main(int argc, char *argv[]){
         
         input = FileReader::read(params["filepath"]);
     }
+     */
     
     /*
      FibHeap Tests
@@ -44,11 +49,23 @@ int main(int argc, char *argv[]){
     /*
     FibHeap *heap1 = new FibHeap();
     
-    FibHeap::insert(new Item(10), heap1);
-    FibHeap::insert(new Item(11), heap1);
-    FibHeap::insert(new Item(12), heap1);
-    FibHeap::insert(new Item(100), heap1);
+    Node *n3 = FibHeap::insert(new City(3), heap1);
+    Node *n4 = FibHeap::insert(new City(4), heap1);
+    Node *n5 = FibHeap::insert(new City(5), heap1);
+   Node *n7=  FibHeap::insert(new City(7), heap1);
+    Node *n8 = FibHeap::insert(new City(8), heap1);
+    Node *n14= FibHeap::insert(new City(14), heap1);
+    Node *n12 = FibHeap::insert(new City(12), heap1);
+   Node *n10 =  FibHeap::insert(new City(10), heap1);
+   Node *n9 =  FibHeap::insert(new City(9), heap1);
+   Node *n15 =  FibHeap::insert(new City(15), heap1);
     
+    heap1->_linkRoots();
+    
+    FibHeap::decreaseKey(4, n10, heap1);
+     */
+    
+    /*
     for(int i = 0; i < 17; i++){
         FibHeap::insert(new Item(i), heap1);
     }
@@ -64,11 +81,33 @@ int main(int argc, char *argv[]){
     /*
      Input File Reading Tests
      */
-    /*
-    std::string filename = "/Volumes/Files/gregorymoon/Google Drive/School/2015-2016/Spring 2016/CSE 591 - Foundations of Algorithms/programming assignment/1/dijkstra/dijkstra/inputs/input-1.txt";
+    std::string filename = "/Volumes/Files/gregorymoon/Google Drive/School/2015-2016/Spring 2016/CSE 591 - Foundations of Algorithms/programming assignment/1/dijkstra/dijkstra/inputs/input-2.txt";
     InputReaderResult *result = FileReader::read(filename);
-     */
-     
+    
+    std::map<unsigned long, City *> path = Dijkstra::run(result);
+    std::vector<unsigned long> output;
+    unsigned long currKey = path[result->to]->key;
+    output.push_back(result->to);
+    
+    do{
+        output.push_back(currKey);
+        currKey = path[currKey]->key;
+    }while(currKey != result->from);
+    
+    output.push_back(result->from);
+    
+    while(output.size() > 0){
+        if(output.size() > 1){
+            printf("%lu -> ", output.back());
+        }
+        else{
+            printf("%lu\n", output.back());
+        }
+        
+        output.pop_back();
+    }
+    
+    
     /*
      Command Line Reading Tests
      */

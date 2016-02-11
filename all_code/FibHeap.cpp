@@ -8,7 +8,7 @@
 
 #include "FibHeap.hpp"
 
-int nullptr = 0;
+//int nullptr = 0;
 
 /*
  Public
@@ -31,12 +31,12 @@ Node *FibHeap::findMin(FibHeap *heap)
 }
 
 
-void FibHeap::insert(Item *item, FibHeap *heap)
+Node *FibHeap::insert(City *city, FibHeap *heap)
 {
-    FibHeap::insert(new Node(item), heap);
+    return FibHeap::insert(new Node(city), heap);
 }
 
-void FibHeap::insert(Node *node, FibHeap *heap)
+Node *FibHeap::insert(Node *node, FibHeap *heap)
 {
     if (heap->min == nullptr) 
     {
@@ -46,12 +46,13 @@ void FibHeap::insert(Node *node, FibHeap *heap)
     {
         *heap = *FibHeap::_meld(heap, new FibHeap(node));
     }
+    return node;
 }
 
-Item *FibHeap::deleteMin(FibHeap *heap)
+City *FibHeap::deleteMin(FibHeap *heap)
 {
     Node *currChild = heap->min->child;
-    Item *ret = heap->min->item;
+    City *ret = heap->min->item;
     
     if(heap->min->right == heap->min)
     {
@@ -101,71 +102,105 @@ If the new key of i is smaller than the key of the minimum node,
 
 This method works because A is nonnegative; decreasing the key of i preserves heap order within the subtree rooted at x, though it may violate heap order between x and its parent. A decrease key operation takes 0( 1) actual time.
 */
+/*
 void FibHeap::decreaseKey(int delta, Node *node, FibHeap *heap)
 {
-    Node* parent = node->parent;
+    node->item->key -= delta;
+    
+    if(node->parent != nullptr){
+        if(node->parent->child == node){
+            if(node->right != node){
+                node->parent->child = node->right;
+            }
+            else{
+                node->parent->child = nullptr;
+            }
+        }
+        
+        node->parent->rank--;
 
-    node->item->key -= delta;       // Might want to trap an error where (key - delta) < 0
-
-    if (parent == null || parent->item->key <= node->item->key)
-    {
-        return; // Don't need to do anything. Node is already root or does not beak the heap
+        node->left->right = node->right;
+        node->right->left = node->left;
+        
+        node->parent = nullptr;
+        node->left = nullptr;
+        node->right = nullptr;
+        
+        FibHeap::insert(node, heap);
     }
-
-    _cut(node, heap)
+}
+ */
+void FibHeap::decreaseKey(unsigned long delta, Node *node, FibHeap *heap)
+{
+    Node* parent = node->parent;
+    
+    node->item->distance = node->item->distance - delta;       // Might want to trap an error where (key - delta) < 0
+    
+    if (parent == nullptr)
+    {
+        if(heap->min->distance() > node->distance()){
+            heap->min = node;
+        }
+        
+        return;
+    }
+    else if (parent->item->distance <= node->item->distance){
+        return;
+    }
+    
+    FibHeap::_cut(node, heap);
 }
 
-/*
- Private
- */
+
 void FibHeap::_cut(Node *node, FibHeap *heap)
 {
-    Node* originalParent = node->parent;
-
+    Node *originalParent = node->parent;
+    
     if (originalParent != nullptr)
     {
-        originalParent->item->rank -= 1;
-
+        originalParent->rank--;
+        
         /* Cut off pointers to node. */
         // Left
         Node* originalLeft = node->left;
         originalLeft->right = node->right;
-
+        
         // Right
         Node* originalRight = node->right;
-        originalRight->left = node->left; 
-
+        originalRight->left = node->left;
+        
         // Parent
         if(originalLeft == node)     // IE node is an only child
-        {       
+        {
             originalParent->child = nullptr;
         }
-        else if (originalParent->child = node)      // IE parent points to child we are removing
+        else if (originalParent->child == node)      // IE parent points to child we are removing
         {
             originalParent->child = node->right;
         }
-
-        /* Hoist node to root */ //I'm using the sibling pointers of min to track all root items.
-
+        
+        /* Hoist node to root */ //I'm using the sibling pointers of min to track all root Citys.
+        
         node->parent = nullptr;  // Is null how we denote root level?
-
+        
+        Node *min = heap->min;
         Node* rMin = min->right;
-
+        
         min->right = node;
         node->right = rMin;
-
+        
         rMin->left = node;
         node->left = min;
-
-
-        if (min->item->key > node->item->key)
+        
+        
+        if (min->item->distance > node->item->distance)
         {
-            min = node;    
+            heap->min = node;
         }
-        // Is there a data structure that keeps track of what is in root? 
+        // Is there a data structure that keeps track of what is in root?
         // If so, add this node to root.
-    
-        // Cascade markings of original parent and _cut if needed.    
+        
+        // Cascade markings of original parent and _cut if needed.
         if(originalParent->mark == false)
         {
             originalParent->mark = true;
@@ -173,8 +208,8 @@ void FibHeap::_cut(Node *node, FibHeap *heap)
         else
         {
             originalParent->mark = false;
-            originalParent->rank -= 1;            
-            _cut(originalParent);
+            originalParent->rank -= 1;
+            FibHeap::_cut(originalParent, heap);
             
             // Set parent->mark to false
             // Null child pointer
@@ -184,57 +219,55 @@ void FibHeap::_cut(Node *node, FibHeap *heap)
     }
 }
 
-/*
-Node* FibHeap::_find(Item *item)
+void FibHeap::deleteNode(Node *node, FibHeap *heap)
 {
-    Node *currNode = this->min, *startNode = currNode;
-    bool found = false;
+    if(node == heap->min){
+        FibHeap::deleteMin(heap);
+        return;
+    }
     
-    do
+    node->left->right = node->right;
+    node->right->left = node->left;
+    
+    if (node->parent != nullptr)
     {
-        if (item == currNode->item)
-        {
-            found = true;
-        }
-        else if (currNode->key() <= item->key) 
-        {
-            currNode = currNode->right;
-        }
-        else
-        {
-            currNode = currNode->child;
-            startNode = currNode;
-        }
+        node->parent->rank--;
 
-    } while(!found && startNode != currNode);
+        if(node->left == node)     // IE node is an only child
+        {       
+            node->parent->child = nullptr;
+        }
+        else if (node->parent->child == node)
+        {
+            node->parent->child = node->right;
+        }
+    }
     
-    if(!found)
-    {
-        return nullptr;
+    if(node->child != nullptr){
+        node->child->right = heap->min->right;
+        node->child->left = heap->min;
+        node->child->parent = nullptr;
     }
-    else
-    {
-        return currNode;
-    }
+    
+    heap->_linkRoots();
 }
-*/
 
 void FibHeap::_linkRoots()
 {
-    unsigned long minValue = INT_MAX;
+    unsigned long minValue = ULONG_MAX;
     bool update;
     std::map<unsigned long, Node *> rankMap;
     Node *currNode = this->min;
     
     if(currNode != nullptr)
-{
+    {
         do
         {
             update = false;
             
-            if (minValue > currNode->key()) 
+            if (minValue > currNode->distance())
             {
-                minValue = currNode->key();
+                minValue = currNode->distance();
                 this->min = currNode;
             }
             
@@ -264,7 +297,7 @@ FibHeap *FibHeap::_meld(FibHeap *first, FibHeap *second)
 {
     FibHeap *a, *b;
     
-    if (first->min->key() < second->min->key()) 
+    if (first->min->distance() < second->min->distance())
     {
         a = first;
         b = second;

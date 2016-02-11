@@ -13,30 +13,29 @@
 #include <map>
 #include <vector>
 
-#include "Item.hpp"
+#include "City.hpp"
 #include "Node.hpp"
 
 
 class FibHeap{
 private:
-    void _linkRoots();
     static FibHeap *_meld(FibHeap *first, FibHeap *second);
-    //Node *FibHeap::_find(Item *item);
-    void FibHeap::_cut(Node *node, FibHeap *heap);
+    static void _cut(Node *node, FibHeap *heap);
     
 public:
+    void _linkRoots();
+    
     Node *min;
     
     FibHeap();
     FibHeap(Node *min);
     
-    static void decreaseKey(int delta, Item *item, FibHeap *heap);
-    static void decreaseKey(int delta, Node *node, FibHeap *heap);
-
+    static void deleteNode(Node *node, FibHeap *heap);
+    static void decreaseKey(unsigned long delta, Node *node, FibHeap *heap);
     static Node *findMin(FibHeap *heap);
-    static void insert(Node *node, FibHeap *heap);
-    static void insert(Item *item, FibHeap *heap);
-    static Item *deleteMin(FibHeap *heap);
+    static Node *insert(Node *node, FibHeap *heap);
+    static Node *insert(City *City, FibHeap *heap);
+    static City *deleteMin(FibHeap *heap);
 };
 
 #endif /* FibHeap_hpp */

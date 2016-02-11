@@ -6,6 +6,7 @@
 //  Copyright © 2016 Gregory Moon. All rights reserved.
 //
 
+/*
 #include <string>
 
 #include "FibHeap.hpp"
@@ -14,6 +15,7 @@
 
 static void showUsage();
 static std::map<std::string, std::string> getParameters(int argc, char *argv[]);
+/*
 
 int main(int argc, char *argv[]){
     /*
@@ -21,6 +23,7 @@ int main(int argc, char *argv[]){
      
      Would like to use getopt but it's not necessarily as cross-platform friendly as doing it a simpler/less effective way. The getParameters/showUsage functions should be fine for our purposes though.
      */
+/*
     InputReaderResult *input;
     
     if(argc < 2){
@@ -36,7 +39,7 @@ int main(int argc, char *argv[]){
         
         input = FileReader::read(params["filepath"]);
     }
-    
+    */
     /*
      FibHeap Tests
      */
@@ -74,8 +77,11 @@ int main(int argc, char *argv[]){
      */
     /*
     CommandLineReader::read();
+
      */
+/*
 }
+
 
 static std::map<std::string, std::string> getParameters(int argc, char *argv[]){
     std::map<std::string, std::string> options;
@@ -108,7 +114,7 @@ static std::map<std::string, std::string> getParameters(int argc, char *argv[]){
     
     return options;
 }
-
+/*
 static void showUsage()
 {
     fprintf(stderr,
@@ -119,3 +125,4 @@ static void showUsage()
         "If no option is included, you will be prompted for inputs from the command line.\n\n"
     );
 }
+*/

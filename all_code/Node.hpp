@@ -11,22 +11,21 @@
 
 #include <map>
 
-#include "Item.hpp"
-
-
-
+#include "City.hpp"
 
 class Node{
 public:
     Node *parent, *child, *left, *right;
-    Item *item;
+    City *item;
+    bool mark;
     int rank;
 
 
-    Node(Item* item);
+    Node(City* item);
     
     void addChild(Node *child);
     unsigned long key();
+    unsigned long distance();
     static Node *link(Node *first, Node *second);
     
 private:

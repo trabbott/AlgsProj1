@@ -6,22 +6,21 @@
 //  Copyright © 2016 Gregory Moon. All rights reserved.
 //
 
+/*
 #ifndef Item_hpp
 #define Item_hpp
 
-#include <stdio.h>
-#include "Node.hpp"
+#include <climits>
 
-class Item
-{
-public:
+class Item{
+protected:
     unsigned long key;
     bool visited;  
-    int distance;
-    Node* previousCity;
+    unsigned long distance;
 
 
     Item(unsigned long key);
 };
 
 #endif /* Item_hpp */
+*/

@@ -2,23 +2,27 @@
 //  City.hpp
 //  dijkstra
 //
-//  Created by Gregory Moon on 2/3/16.
+//  Created by Gregory Moon on 1/31/16.
 //  Copyright © 2016 Gregory Moon. All rights reserved.
 //
 
 #ifndef City_hpp
 #define City_hpp
 
+#include <climits>
 #include <vector>
 
 #include "Road.hpp"
-#include "Item.hpp"
 
-class City : Item{
+class City{
 public:
     std::vector<Road *> roads;
-    
+    unsigned long key;
+    bool visited;
+    unsigned long distance;
+
+
     City(unsigned long key);
 };
 
-#endif /* City_hpp */
+#endif /* Item_hpp */

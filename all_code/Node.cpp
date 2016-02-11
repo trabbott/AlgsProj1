@@ -7,8 +7,8 @@
 
 #include "Node.hpp"
 
-Node::Node(Item *item){
-    this->item = item;
+Node::Node(City *city){
+    this->item = city;
     this->rank = 0;
 
     this->child = nullptr;
@@ -88,6 +88,10 @@ void Node::_linkChildren(){
             currNode = currNode->right;
         } while ( update );
     }
+}
+
+unsigned long Node::distance(){
+    return this->item->distance;
 }
 
 unsigned long Node::key(){
