@@ -19,7 +19,7 @@ InputReaderResult *CommandLineReader::read(){
     
     //prompt for optional roads
     numExistingRoads = CommandLineReader::promptRoads(true);
-    CommandLineReader::promptRoadDetails(numExistingRoads, cities, true);
+    std::vector<Road *> optRoads = CommandLineReader::promptRoadDetails(numExistingRoads, cities, true);
     printf("\n");
     
     from = CommandLineReader::promptLimit(cities.size(), true);
@@ -28,10 +28,11 @@ InputReaderResult *CommandLineReader::read(){
     to = CommandLineReader::promptLimit(cities.size(), false);
     printf("\n");
     
-    return new InputReaderResult(to, from, cities);
+    return new InputReaderResult(to, from, cities, optRoads);
 }
 
-void CommandLineReader::promptRoadDetails(unsigned long numRoads, std::map<unsigned long, City *> cities, bool optional){
+std::vector<Road *> CommandLineReader::promptRoadDetails(unsigned long numRoads, std::map<unsigned long, City *> cities, bool optional){
+    std::vector<Road *> roads;
     unsigned long cityLimit = cities.size() - 1;
     const char *optionalText = CommandLineReader::getOptionalText(optional);
     Road *temp;
@@ -51,16 +52,21 @@ void CommandLineReader::promptRoadDetails(unsigned long numRoads, std::map<unsig
             }
             
             temp = new Road(to, from, length, optional);
+            roads.push_back(temp);
         }
         catch(std::invalid_argument& e){
             InputReader::logError("Values for 'fromCity' and 'toCity' must be unique integers between 0 and %lu inclusive and the value for 'length' must be a positive integer.", cityLimit);
             i--;
             continue;
         }
-        cities[temp->from]->roads.push_back(temp);
+        
+        cities[temp->from]->fromRoads.push_back(temp);
+        cities[temp->to]->toRoads.push_back(temp);
         
         printf("\t\t\tNew %s road from %lu to %lu with length %lu.\n", optionalText, temp->from, temp->to, temp->length);
     }
+    
+    return roads;
 }
 
 std::map<unsigned long, City *> CommandLineReader::promptCities(){

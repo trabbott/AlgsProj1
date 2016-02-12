@@ -11,6 +11,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 #include "City.hpp"
 
@@ -18,8 +19,9 @@ class InputReaderResult{
 public:
     unsigned long to, from;
     std::map<unsigned long, City *> cities;
+    std::vector<Road *> optionalRoads;
     
-    InputReaderResult(unsigned long to, unsigned long from, std::map<unsigned long, City *> cities);
+    InputReaderResult(unsigned long to, unsigned long from, std::map<unsigned long, City *> cities, std::vector<Road *> optRoads);
 };
 
 class InputReader{

@@ -8,10 +8,11 @@
 
 #include "InputReader.hpp"
 
-InputReaderResult::InputReaderResult(unsigned long to, unsigned long from, std::map<unsigned long, City *> cities){
+InputReaderResult::InputReaderResult(unsigned long to, unsigned long from, std::map<unsigned long, City *> cities, std::vector<Road *> optRoads){
     this->to= to;
     this->from = from;
     this->cities = cities;
+    this->optionalRoads = optRoads;
 }
 
 const char* InputReader::getOptionalText(bool optional){

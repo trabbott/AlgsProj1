@@ -18,6 +18,22 @@ Node::Node(City *city){
     
 }
 
+std::vector<Node *> Node::getChildren(){
+    std::vector<Node *> ret;
+    Node *currNode;
+    
+    if((currNode = this->child) != nullptr){
+        Node *firstNode = currNode;
+        
+        do{
+            ret.push_back(currNode);
+            currNode = currNode->right;
+        }while(currNode != firstNode);
+    }
+    
+    return ret;
+}
+
 Node *Node::link(Node *first, Node *second){
     Node *a, *b;
     
@@ -49,16 +65,14 @@ void Node::addChild(Node *newChild){
         newChild->right = this->child;
     }
     else{
-        Node *temp = this->child->right;
-        
-        newChild->right = temp;
-        temp->left = newChild;
+        newChild->right = this->child->right;
+        this->child->right->left = newChild;
     }
     
     this->child->right = newChild;
-    
     newChild->left = this->child;
     newChild->parent = this;
+    
     this->rank++;
     this->_linkChildren();
 }

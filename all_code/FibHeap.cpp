@@ -51,30 +51,22 @@ Node *FibHeap::insert(Node *node, FibHeap *heap)
 
 City *FibHeap::deleteMin(FibHeap *heap)
 {
-    Node *currChild = heap->min->child;
+    std::vector<Node *> children = heap->min->getChildren();
     City *ret = heap->min->item;
     
-    if(heap->min->right == heap->min)
-    {
-        heap->min = nullptr;
-    }
-    else
-    {
+    if(heap->min->right != heap->min){
         heap->min->right->left = heap->min->left;
         heap->min->left->right = heap->min->right;
         heap->min = heap->min->right;
     }
     
-    Node *firstChild = currChild;
+    Node *temp;
+    heap->min = nullptr;
     
-    if (currChild != nullptr) 
-    {
-        do
-        {
-            currChild->parent = nullptr;
-            FibHeap::insert(currChild, heap);
-            currChild = currChild->right;
-        } while (currChild != firstChild);
+    for(auto it = children.begin(); it != children.end(); it++){
+        temp = *it;
+        temp->parent = nullptr;
+        FibHeap::insert(temp, heap);
     }
     
     heap->_linkRoots();
@@ -104,13 +96,36 @@ This method works because A is nonnegative; decreasing the key of i preserves he
 */
 void FibHeap::decreaseKey(unsigned long delta, Node *node, FibHeap *heap)
 {
-    Node* parent = node->parent;
     
     node->item->distance = node->item->distance - delta;       // Might want to trap an error where (key - delta) < 0
     
+    if(node->parent != nullptr){
+        if(node->parent->child == node){
+            if(node->right == node){
+                node->parent->child = nullptr;
+            }
+            else{
+                node->parent->child = node->right;
+            }
+        }
+    }
+    
+    if(node->right != node){
+        node->right->left = node->left;
+        node->left->right = node->right;
+    }
+    
+    node->parent = nullptr;
+    node->left = node;
+    node->right = node;
+    
+    FibHeap::insert(node, heap);
+    
+    /*
+    Node* parent = node->parent;
     if (parent == nullptr)
     {
-        if(heap->min->distance() > node->distance()){
+        if(heap->min != nullptr && heap->min->distance() > node->distance()){
             heap->min = node;
         }
         
@@ -119,8 +134,8 @@ void FibHeap::decreaseKey(unsigned long delta, Node *node, FibHeap *heap)
     else if (parent->item->distance <= node->item->distance){
         return;
     }
-    
     FibHeap::_cut(node, heap);
+     */
 }
 
 
@@ -191,21 +206,18 @@ void FibHeap::_cut(Node *node, FibHeap *heap)
     }
 }
 
-void FibHeap::_linkRoots()
-{
-    unsigned long minValue = ULONG_MAX;
-    bool update;
+void FibHeap::_linkRoots(){
     std::map<unsigned long, Node *> rankMap;
     Node *currNode = this->min;
     
-    if(currNode != nullptr)
-    {
-        do
-        {
+    unsigned long minValue = ULONG_MAX;
+    bool update;
+    
+    if(currNode != nullptr){
+        do{
             update = false;
             
-            if (minValue > currNode->distance())
-            {
+            if (minValue > currNode->distance()){
                 minValue = currNode->distance();
                 this->min = currNode;
             }

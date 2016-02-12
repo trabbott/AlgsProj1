@@ -12,6 +12,7 @@
 #include <fstream>
 #include <map>
 #include <string>
+#include <vector>
 
 #include "City.hpp"
 #include "InputReader.hpp"
@@ -22,7 +23,7 @@ class FileReader : InputReader{
 private:
     static unsigned long lineNo;
     
-    static void readRoads(std::ifstream& stream, std::map<unsigned long, City *> cities, bool optional);
+    static std::vector<Road *> readRoads(std::ifstream& stream, std::map<unsigned long, City *> cities, bool optional);
     static Road* readRoad(std::ifstream& stream, bool optional, long unsigned numCities);
     static std::map<unsigned long, City*> readCities(std::ifstream& stream);
     static unsigned long readUL(std::ifstream &stream, bool newline);

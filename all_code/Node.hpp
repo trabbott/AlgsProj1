@@ -25,6 +25,7 @@ public:
     Node(City* item);
     
     void addChild(Node *child);
+    std::vector<Node *> getChildren();
     unsigned long key();
     unsigned long distance();
     static Node *link(Node *first, Node *second);

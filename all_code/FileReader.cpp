@@ -33,7 +33,7 @@ InputReaderResult *FileReader::read(std::string path){
     printf("\n");
     
     //read potential roads
-    readRoads(stream, cities, true);
+    std::vector<Road *> optRoads = readRoads(stream, cities, true);
     printf("\n");
     
     from = FileReader::readUL(stream, true);
@@ -44,7 +44,7 @@ InputReaderResult *FileReader::read(std::string path){
     
     stream.close();
     
-    return new InputReaderResult(to, from, cities);
+    return new InputReaderResult(to, from, cities, optRoads);
 }
 
 /*
@@ -85,7 +85,7 @@ std::map<unsigned long, City*> FileReader::readCities(std::ifstream& stream){
     for (int i = 0; i < numCities; i++) {
         City* tempCity = new City(i);
         cities.insert(std::pair<int, City *>(i, tempCity));
-        printf("\tReading city %d.\n", i);
+        printf("  Reading city %d.\n", i);
     }
     
     printf("Done reading cities.\n");
@@ -93,8 +93,9 @@ std::map<unsigned long, City*> FileReader::readCities(std::ifstream& stream){
     return cities;
 }
 
-void FileReader::readRoads(std::ifstream& stream, std::map<unsigned long, City*> cities, bool optional){
+std::vector<Road *> FileReader::readRoads(std::ifstream& stream, std::map<unsigned long, City*> cities, bool optional){
     Road *temp;
+    std::vector<Road *> roads;
     unsigned long numRoads;
     const char* optionalText = FileReader::getOptionalText(optional);
     numRoads = FileReader::readUL(stream, true);
@@ -102,12 +103,21 @@ void FileReader::readRoads(std::ifstream& stream, std::map<unsigned long, City*>
     
     for(int i = 0; i < numRoads; i++){
         temp = readRoad(stream, optional, cities.size());
-        cities[temp->from]->roads.push_back(temp);
         
-        printf("\tReading %s road from city %lu to city %lu with length of %lu\n", optionalText, temp->from, temp->to, temp->length);
+        if(!optional){
+            cities[temp->from]->fromRoads.push_back(temp);
+            cities[temp->to]->toRoads.push_back(temp);
+        }
+        else{
+            roads.push_back(temp);
+        }
+        
+        printf("  Reading %s road from city %lu to city %lu with length of %lu\n", optionalText, temp->from, temp->to, temp->length);
     }
     
     printf("Done reading %s uni-directional roads.\n", optionalText);
+    
+    return roads;
 }
 
 unsigned long FileReader::readUL(std::ifstream &stream, bool newline){

@@ -24,7 +24,7 @@ public:
 private:
     static std::map<unsigned long, City *> promptCities();
     static unsigned long promptRoads(bool optional);
-    static void promptRoadDetails(unsigned long numRoads, std::map<unsigned long, City *> cities, bool optional);
+    static std::vector<Road *> promptRoadDetails(unsigned long numRoads, std::map<unsigned long, City *> cities, bool optional);
     static unsigned long promptLimit(unsigned long numCities, bool start);
 };
 

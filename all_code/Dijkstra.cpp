@@ -28,115 +28,88 @@ From Wikipedia
 22
 23     return dist[], prev[]
 */
-std::map<unsigned long, City *> Dijkstra::run(InputReaderResult *params)
-{
-    std::map<unsigned long, City*> previous;
-    std::map<unsigned long, City*> cities = params->cities;
-    std::map<unsigned long, Node*> cityNodes;
+DijkstraResult::DijkstraResult(std::map<unsigned long, City *> previous, std::map<unsigned long, unsigned long> distances){
+    this->previous = previous;
+    this->distances = distances;
+}
 
+DijkstraResult *Dijkstra::runForward(InputReaderResult *params){
+    return Dijkstra::run(params->from, params->to, params->cities, true);
+    
+}
+
+DijkstraResult *Dijkstra::runBackward(InputReaderResult *params){
+    return Dijkstra::run(params->to, params->from, params->cities, false);
+}
+
+DijkstraResult *Dijkstra::run(unsigned long fromId, unsigned long toId, std::map<unsigned long, City *> cities, bool forward){
+    std::map<unsigned long, City*> previous;
+    std::map<unsigned long, Node*> cityNodes;
+    std::map<unsigned long, unsigned long> distances;
 
     FibHeap* heap = new FibHeap();
+    Node *temp;
     
-    //dist[source] ← 0
-    cities[params->from]->distance = 0;
-    cities[params->from]->mand->value = 0;
-    cities[params->from]->opt->value = 0;
-    
-    //create vertex set Q
-    
-    for(int city = 0; city < cities.size(); city++)
-    {
-        Node *node = new Node(cities[city]);
+    for(auto it = cities.begin(); it != cities.end(); it++){
+        it->second->visited = false;
         
-        heap->insert(node, heap);
-        cityNodes[cities[city]->key] = node;
+        if (it->second->key == fromId) {
+            it->second->distance = 0;
+        }
+        else{
+            it->second->distance = ULONG_MAX;
+        }
+        
+        temp = new Node(it->second);
+        FibHeap::insert(temp, heap);
+        cityNodes[it->second->key] = temp;
     }
     
-
+    City *minCity, *neighbor;
+    Road *road;
+    std::vector<Road *> roads;
     
-    //while Q is not empty:
     while(heap->min != nullptr)
     {
-        //u ← vertex in Q with min dist[u]
-        //remove u from Q
-        City *minItem = heap->deleteMin(heap);
+        minCity = heap->deleteMin(heap);
+        
+        if(forward){
+            roads = minCity->fromRoads;
+        }
+        else{
+            roads = minCity->toRoads;
+        }
 
-        //for each neighbor v of u:
-        for (auto it = minItem->roads.begin(); it != minItem->roads.end(); it++)
+        for (auto it = roads.begin(); it != roads.end(); it++)
         {
-            Road *road = *it;
+            road = *it;
             
-            if(road->optional){
+            if(forward){
+                neighbor = cities[road->to];
+            }else{
+                neighbor = cities[road->from];
             }
-            
-            City *neighbor = cities[road->to];
             
             if (neighbor->visited == false)
             {
-                //alt ← dist[u] + length(u, v)
-                unsigned long altDistance = minItem->distance + road->length;
+                unsigned long altDistance = minCity->distance + road->length;
                 
-                //if alt < dist[v]:
                 if (altDistance < neighbor->distance)
                 {
                     unsigned long sub = neighbor->distance - altDistance;
                     
-                    //prev[v] ← u
-                    previous[neighbor->key] = minItem;
-                    
-                    //dist[v] ← alt
+                    previous[neighbor->key] = minCity;
+                    distances[neighbor->key] = altDistance;
                     FibHeap::decreaseKey(sub, cityNodes[neighbor->key], heap);
-                    
-                    if(road->optional){
-                        //If no optional road has been built on this path yet
-                        if(minItem->opt->value == ULONG_MAX){
-                            
-                            unsigned long newVal;
-                            
-                            if(minItem->opt->value == ULONG_MAX){
-                                newVal = road->length + minItem->mand->value;
-                            }else{
-                                newVal = road->length + minItem->opt->value;
-                            }
-                            
-                            
-                            if(neighbor->opt->value > newVal){
-                                neighbor->opt->value = newVal;
-                                neighbor->opt->prev = minItem;
-                            }
-                        }
-                    }
-                    else{
-                        unsigned long newVal = road->length + minItem->mand->value ;
-                        
-                        if(neighbor->mand->value > newVal){
-                            neighbor->mand->value = newVal;
-                            neighbor->mand->prev = minItem;
-                        }
-                        
-                        //If not optional road has been built to this neighbor yet
-                        if (neighbor->opt->value == ULONG_MAX) {
-                            //If no optional road has been built along this path yet and we are not at the starting node.
-                            if(minItem->opt->value != ULONG_MAX && minItem->distance != 0){
-                                neighbor->opt->value = road->length + minItem->opt->value;
-                                neighbor->opt->prev = minItem;
-                            }
-                        }
-                        else{
-                            newVal = road->length + minItem->opt->value;
-                            
-                            if(newVal < neighbor->opt->value){
-                                neighbor->opt->value = newVal;
-                                neighbor->opt->prev = minItem;
-                            }
-                        }
-                    }
                 }
             }
         }
         
-        minItem->visited = true;
+        minCity->visited = true;
     }
     
-    return previous;
+    distances[toId] = cities[toId]->distance;
+    
+    return new DijkstraResult(previous, distances);
+    
 }
