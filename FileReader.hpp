@@ -19,6 +19,12 @@
 #include "Road.hpp"
 
 
+//============================================================================================
+// FileReader
+//
+// A simple class used for file input if the user chooses to insert information
+// about their graph from a file.
+//============================================================================================
 class FileReader : InputReader{
 private:
     static unsigned long lineNo;
