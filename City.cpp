@@ -8,6 +8,17 @@
 
  #include "City.hpp"
 
+//============================================================================================
+// City:City
+//
+// Inputs:
+//  key: The id for this city.
+//
+// Outputs:
+//
+// A constructor for the city class.
+//============================================================================================
+
 City::City(unsigned long key){
     this->key = key;
 }

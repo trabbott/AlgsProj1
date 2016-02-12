@@ -16,11 +16,22 @@
 #include "City.hpp"
 #include "Node.hpp"
 
-
+//============================================================================================
+// FibHeap
+//
+// A class representing a Fibonacci Heap with all of the corresponding attributes and methods.
+// A fibonacci heap is used as the priority queue in Dijkstra's Algorithm in order to achieve
+// the desired O(m + nlg(n)) complexity, where n is the number of nodes in a graph and m is the
+// number of edges in that graph.
+//
+// Details for its implementation were found at these linkts:
+//
+// 1. http://www.cse.yorku.ca/~aaw/Jason/FibonacciHeapAlgorithm.html
+// 2. http://www.computer.org/csdl/proceedings/focs/1984/0591/00/0715934.pdf
+//============================================================================================
 class FibHeap{
 private:
     static FibHeap *_meld(FibHeap *first, FibHeap *second);
-    //static void _cut(Node *node, FibHeap *heap);
     static void _cascadingCut(FibHeap *heap, Node *node);
     static void _cut(FibHeap *heap, Node *node);
 

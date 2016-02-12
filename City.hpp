@@ -14,6 +14,13 @@
 
 #include "Road.hpp"
 
+//============================================================================================
+// City
+//
+// A simple class that contains details about a City, including the roads leading to and from that city,
+// the distance from the starting City in Dijkstra's Algorithm to itself, whether or not it has been
+// visited by an instance of Dijkstra's algorithm yet, and its id (key).
+//============================================================================================
 class City{
 public:
     std::vector<Road *> toRoads, fromRoads;
