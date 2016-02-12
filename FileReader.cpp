@@ -8,12 +8,20 @@
 
 #include "FileReader.hpp"
 
-/*
- Public
- */
-
 unsigned long FileReader::lineNo = 0;
 
+//============================================================================================
+// FileReader::read
+//
+// Input:
+//  path: path to the file containing details about the graph to be used with Dijkstra's Algorithm.
+//
+// Output:
+//  InputReaderResult object.
+//
+// Read the details about the graph that will be used with Dijkstra's Algorithm from the specified
+// file.
+//============================================================================================
 InputReaderResult *FileReader::read(std::string path){
     FileReader::lineNo = 0;
     std::ifstream stream;
@@ -47,11 +55,20 @@ InputReaderResult *FileReader::read(std::string path){
     return new InputReaderResult(to, from, cities, optRoads);
 }
 
-/*
- Private 
- */
-
-
+//============================================================================================
+// FileReader::readRoad
+//
+// Input:
+//  stream:     A reference to the currenly open file.
+//  optional:   A boolean flag indicating whether or not the road being read is an optional road
+//              or not.
+//  numCities:  The total number of cities in the graph.
+//
+// Output:
+//  A Road object initialized using the information read from the file.
+//
+// Read in the details about a road from the a the file specified by stream.
+//============================================================================================
 Road* FileReader::readRoad(std::ifstream& stream, bool optional, long unsigned numCities){
     unsigned long to, from, length, cityLimit = numCities - 1;
     
@@ -74,6 +91,18 @@ Road* FileReader::readRoad(std::ifstream& stream, bool optional, long unsigned n
     }
 }
 
+//============================================================================================
+// FileReader::readCities
+//
+// Input:
+//  stream: A reference to the currenly open file.
+//
+// Output:
+//  A map with city ids as keys and City objects as values.
+//
+// Read the number of cities in the graph from a file and create that many cities, using an
+// incrementing index starting at 0 as ids for the cities.
+//============================================================================================
 std::map<unsigned long, City*> FileReader::readCities(std::ifstream& stream){
     unsigned long numCities;
     std::map<unsigned long, City*> cities;
@@ -93,6 +122,20 @@ std::map<unsigned long, City*> FileReader::readCities(std::ifstream& stream){
     return cities;
 }
 
+//============================================================================================
+// FileReader::readRoads
+//
+// Input:
+//  stream:     A reference to the currenly open file.
+//  cities:     A map using city ids as keys and City objects as values.
+//  optional:   A boolean flag indicating whether the roads being read in are optional or not.
+//
+// Output:
+//  A vector of Road objects.
+//
+// Read in a set of multiple optional or mandatoryroads from a file, updating the 'toRoads'
+// and 'fromRoads' attributes of each City object accordingly.
+//============================================================================================
 std::vector<Road *> FileReader::readRoads(std::ifstream& stream, std::map<unsigned long, City*> cities, bool optional){
     Road *temp;
     std::vector<Road *> roads;
@@ -120,6 +163,19 @@ std::vector<Road *> FileReader::readRoads(std::ifstream& stream, std::map<unsign
     return roads;
 }
 
+//============================================================================================
+// FileReader::readUL
+//
+// Input:
+//  stream:     A reference to the currenly open file.
+//  newLine:    A boolean flag indicating whether a new line is expected or not so that the
+//              static lineNo attribute can be incremented accordingly.
+//
+// Output:
+//  An unsigned long.
+//
+// Read an unsigned long from the currently open file.
+//============================================================================================
 unsigned long FileReader::readUL(std::ifstream &stream, bool newline){
     unsigned long output;
     stream >> output;
