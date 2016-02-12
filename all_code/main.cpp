@@ -19,7 +19,7 @@
 
 static void showUsage();
 static void printMandatoryPath(InputReaderResult *input, DijkstraResult *forwardResult);
-static void printOptionalPahts(InputReaderResult *input, DijkstraResult *forwardResult, DijkstraResult *backwardResult);
+static void printOptionalPaths(InputReaderResult *input, DijkstraResult *forwardResult, DijkstraResult *backwardResult);
 static std::map<std::string, std::string> getParameters(int argc, char *argv[]);
 
 int main(int argc, char *argv[]){
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]){
     DijkstraResult *forwardResult = Dijkstra::runForward(input), *backwardResult = Dijkstra::runBackward(input);
     
     printMandatoryPath(input, forwardResult);
-    printOptionalPahts(input, forwardResult, backwardResult);
+    printOptionalPaths(input, forwardResult, backwardResult);
 }
 
 static std::map<std::string, std::string> getParameters(int argc, char *argv[]){
@@ -83,7 +83,7 @@ static std::map<std::string, std::string> getParameters(int argc, char *argv[]){
     return options;
 }
 
-static void printOptionalPahts(InputReaderResult *input, DijkstraResult *forwardResult, DijkstraResult *backwardResult){
+static void printOptionalPaths(InputReaderResult *input, DijkstraResult *forwardResult, DijkstraResult *backwardResult){
     std::vector<unsigned long> output;
     Road *temp;
     unsigned long optDist, idx = 1, minPath = 0, minPathValue = ULONG_MAX;
@@ -150,7 +150,33 @@ static void printOptionalPahts(InputReaderResult *input, DijkstraResult *forward
         
         idx++;
     }
-    
+
+    printf("\n\n================================ RESULTS BELOW ===================================\n");
+
+
+    int lastIndexOfShorterPaths = shorterPaths.size() - 1;    
+
+    switch(shorterPaths.size())
+    {
+        case 0:
+            printf("\n0: No optional paths are shorter than the path using only existing roads.");
+            break;
+        case 1:
+            printf("\n1: Optional path %lu is shorter than the path using only existing roads.\n", shorterPaths[0]);
+            printf("\nOptional path %lu is the shortest possible path and has length %lu.\n\n", minPath, minPathValue);
+            break;
+        default:
+            printf("\n2+: Optional paths ");
+            int i;
+            for (i = 0; i < shorterPaths.size() - 2; i++)
+            {
+                printf("%lu ", shorterPaths[i]);
+            }
+            printf("and %lu are shorter than the path using only existing roads.\n", shorterPaths[i]);
+            printf("\nOptional path %lu is the shortest possible path and has length %lu.\n\n", minPath, minPathValue);
+            break;
+    }
+/*
     if (shorterPaths.size() > 0) {
         printf("\nOptional path");
         
@@ -164,11 +190,11 @@ static void printOptionalPahts(InputReaderResult *input, DijkstraResult *forward
                 printf("%lu and %lu ", shorterPaths[0], shorterPaths[1]);
             }
             else{
-                for(int i = 0; i < shorterPaths.size(); i++){
+                for(int i = 0; i < shorterPaths.size() - 1; i++){
                     printf("%lu, ", shorterPaths[i]);
                     
-                    if(i == shorterPaths.size() - 1){
-                        i++;
+                    if(i == shorterPaths.size() - 2){
+                        //i++;
                         printf("and %lu a", shorterPaths[i]);
                     }
                 }
@@ -183,6 +209,7 @@ static void printOptionalPahts(InputReaderResult *input, DijkstraResult *forward
     else{
         printf("\nNo optional paths are shorter than the path using only existing roads.");
     }
+*/
 }
 
 static void printMandatoryPath(InputReaderResult *input, DijkstraResult *forwardResult){
