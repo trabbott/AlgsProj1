@@ -5,6 +5,9 @@ To compile the code simply run the make command in the root directory. This will
 ## Dependencies
 No dependencies other than the standard C/C++ libraries are required.
 
+Working on Ubuntu 14.04 with gcc version 4.8.4
+Working on Mac OS 10.11.3
+
 ## Usage
 By default, the program will prompt the user for command line input. If you want to input a file, use the **-f** or **--file** flags followed by the path to the input file. To see the help message use the **-h** or **--help** flags.<br>
 
