@@ -37,7 +37,7 @@ std::vector<Node *> Node::getChildren(){
 Node *Node::link(Node *first, Node *second){
     Node *a, *b;
     
-    if (first->key() < second->key()) {
+    if (first->distance() < second->distance()) {
         a = first;
         b = second;
     }
@@ -46,10 +46,24 @@ Node *Node::link(Node *first, Node *second){
         b = first;
     }
     
+    if(b->parent == nullptr){
+        a->parent = nullptr;
+    }
+    else if(a->parent == nullptr){
+        b->parent = nullptr;
+    }
+    
     b->left->right = b->right;
     b->right->left = b->left;
     a->addChild(b);
     
+    if(a->parent == a || a->child == a){
+        printf("HERE");
+    }
+    
+    if(b->parent == b || b->child == b){
+        printf("HERE");
+    }
     return a;
 }
 
@@ -95,6 +109,7 @@ void Node::_linkChildren(){
                 
                 while(rankMap[currNode->rank] != nullptr && rankMap[currNode->rank] != currNode){
                     currNode = Node::link(rankMap[currNode->rank], currNode);
+                    
                     rankMap[currNode->rank - 1] = nullptr;
                 }
                 

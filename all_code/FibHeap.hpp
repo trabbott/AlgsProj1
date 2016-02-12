@@ -20,7 +20,10 @@
 class FibHeap{
 private:
     static FibHeap *_meld(FibHeap *first, FibHeap *second);
-    static void _cut(Node *node, FibHeap *heap);
+    //static void _cut(Node *node, FibHeap *heap);
+    static void _cascadingCut(FibHeap *heap, Node *node);
+    static void _cut(FibHeap *heap, Node *node);
+
     
 public:
     void _linkRoots();
