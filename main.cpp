@@ -85,6 +85,8 @@ static void printOptionalPahts(InputReaderResult *input, DijkstraResult *forward
     unsigned long optDist, idx = 1, minPath = 0, minPathValue = ULONG_MAX;
     unsigned long currKey = input->to, mandLength = forwardResult->distances[input->to];
     std::vector<unsigned long> shorterPaths;
+
+    printf("\n\n============ PATHS MADE BY OPTIONAL ROADS BELOW =====================\n");
     
     printf("\nPaths using an optional road:\n");
     for(auto it = input->optionalRoads.begin(); it != input->optionalRoads.end(); it++){
@@ -148,7 +150,7 @@ static void printOptionalPahts(InputReaderResult *input, DijkstraResult *forward
     }
     
     
-    printf("\n\n================================ RESULTS BELOW ===================================\n");
+    printf("\n\n==================== SHORTEST PATH SUMMARY BELOW ==============================\n");
     
     switch(shorterPaths.size())
     {
@@ -162,7 +164,7 @@ static void printOptionalPahts(InputReaderResult *input, DijkstraResult *forward
         default:
             printf("\n2+: Optional paths ");
             int i;
-            for (i = 0; i < shorterPaths.size() - 2; i++)
+            for (i = 0; i < shorterPaths.size() - 1; i++)
             {
                 printf("%lu ", shorterPaths[i]);
             }
