@@ -8,6 +8,19 @@
 
 #include "Road.hpp"
 
+//============================================================================================
+// Road::Road
+//
+// Input:
+//  to:         The city id of the city that the road leads to.
+//  from:       The city id of the city that the road comes from.
+//  length:     The distance from 'to' to 'from'.
+//  optional:   A boolean flag indicating whether or not the road is optional.
+//
+// Output:
+//
+// The constructor for a Road object. Initializes all relevant attributes.
+//============================================================================================
 Road::Road(unsigned long to, unsigned long from, unsigned long length, unsigned long optional){
     
     if (to == from) {
