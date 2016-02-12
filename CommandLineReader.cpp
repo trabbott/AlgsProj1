@@ -2,7 +2,7 @@
 //  CommandLineReader.cpp
 //  dijkstra
 //
-//  Created by Gregory Moon on 2/3/16.
+//  Created by Gregory Moon & Tim Abbott on 2/3/16.
 //  Copyright © 2016 Gregory Moon. All rights reserved.
 //
 
@@ -43,8 +43,11 @@ std::vector<Road *> CommandLineReader::promptRoadDetails(unsigned long numRoads,
     const char *optionalText = CommandLineReader::getOptionalText(optional);
     Road *temp;
     
-    printf("  Enter the details for each road (fromCity:toCity:length):\n");
-    
+    if (numRoads > 0)
+    {
+        printf("  Enter the details for each road (fromCity:toCity:length):\n");
+    }
+
     for (int i = 0; i < numRoads; i++) {
         printf("    Road %d: ", i);
         
@@ -112,7 +115,7 @@ unsigned long CommandLineReader::promptRoads(bool optional){
     
     if(numRoads == ULONG_MAX){
         numRoads = 0;
-        printf("  %lu %s roads (0 - %lu) are being added.\n\n", numRoads, optionalText, numRoads - 1);
+        printf("  %lu %s roads (0 - %lu) are being added.\n\n", numRoads, optionalText, (numRoads > 0 ? numRoads - 1: 0));
     }
     
     return numRoads;

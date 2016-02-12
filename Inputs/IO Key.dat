@@ -1,0 +1,51 @@
+Program input
+How would you like to input data?
+    1: Console
+    2: Read from file
+
+If 1:
+    Prompt for data input
+If 2: 
+    Prompt for file name
+
+DATA INPUT
+
+<n> number of cities (nodes 0 though n-1)
+<m> number of pre-existing roads (edges)
+<1st - Source City: Sink City: Distance>    (node:node:length)
+...
+<m-th - Source City: Sink City: Distance>
+<k> number of potential new roads (edges)
+<1st - Source City: Sink City: Distance>    (node:node:length)
+...
+<k-th - Source City: Sink City: Distance>
+<s> start city
+<t> target city
+
+--------------------Example----------------------
+6
+5
+0:1:4
+1:2:6
+2:3:1
+3:4:10
+4:5:11
+5:6:9
+3
+0:2:5
+2:4:7
+4:6:9
+0
+5
+===============================================================
+
+
+
+OUTPUT
+
+List of roads that make a shorter path than the base path
+Give new road the leads to the shortest path
+--------------------Example----------------------
+These new roads will give a shorter path: 0,1,2
+This road gives the shortest path: 2
+
