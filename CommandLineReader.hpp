@@ -10,8 +10,9 @@
 #define CommandLineReader_hpp
 
 #include <cstdio>
-#include <stdexcept>
 #include <map>
+#include <stdexcept>
+#include <stdio.h>
 
 #include "City.hpp"
 #include "InputReader.hpp"

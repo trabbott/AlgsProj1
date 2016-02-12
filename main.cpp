@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <cstdarg> 
 #include <string>
 #include <map>
 
@@ -23,11 +24,6 @@ static void printOptionalPahts(InputReaderResult *input, DijkstraResult *forward
 static std::map<std::string, std::string> getParameters(int argc, char *argv[]);
 
 int main(int argc, char *argv[]){
-    /*
-     Command Line Parsing
-     
-     Would like to use getopt but it's not necessarily as cross-platform friendly as doing it a simpler/less effective way. The getParameters/showUsage functions should be fine for our purposes though.
-    */
     InputReaderResult *input;
     
     if(argc < 2){
@@ -151,37 +147,28 @@ static void printOptionalPahts(InputReaderResult *input, DijkstraResult *forward
         idx++;
     }
     
-    if (shorterPaths.size() > 0) {
-        printf("\nOptional path");
-        
-        if (shorterPaths.size() == 1) {
-            printf(" %lu is ", shorterPaths[0]);
-        }
-        else{
-            printf("s ");
-            
-            if (shorterPaths.size() == 2) {
-                printf("%lu and %lu ", shorterPaths[0], shorterPaths[1]);
+    
+    printf("\n\n================================ RESULTS BELOW ===================================\n");
+    
+    switch(shorterPaths.size())
+    {
+        case 0:
+            printf("\n0: No optional paths are shorter than the path using only existing roads.\n\n");
+            break;
+        case 1:
+            printf("\n1: Optional path %lu is shorter than the path using only existing roads.\n", shorterPaths[0]);
+            printf("\nOptional path %lu is the shortest possible path and has length %lu.\n\n", minPath, minPathValue);
+            break;
+        default:
+            printf("\n2+: Optional paths ");
+            int i;
+            for (i = 0; i < shorterPaths.size() - 2; i++)
+            {
+                printf("%lu ", shorterPaths[i]);
             }
-            else{
-                for(int i = 0; i < shorterPaths.size(); i++){
-                    printf("%lu, ", shorterPaths[i]);
-                    
-                    if(i == shorterPaths.size() - 1){
-                        i++;
-                        printf("and %lu a", shorterPaths[i]);
-                    }
-                }
-            }
-            
-            printf("are ");
-        }
-       
-        printf("shorter than the path using only existing roads.\n");
-        printf("\nOptional path %lu is the shortest possible path and has length %lu.\n\n", minPath, minPathValue);
-    }
-    else{
-        printf("\nNo optional paths are shorter than the path using only existing roads.");
+            printf("and %lu are shorter than the path using only existing roads.\n", shorterPaths[i]);
+            printf("\nOptional path %lu is the shortest possible path and has length %lu.\n\n", minPath, minPathValue);
+            break;
     }
 }
 
@@ -226,11 +213,11 @@ static void printMandatoryPath(InputReaderResult *input, DijkstraResult *forward
 static void showUsage()
 {
     fprintf(stderr,
-        "Usage: dijkstra <option(s)> INPUT\n"
-        "Options:\n"
-            "\t-h,--help\t\t\t\tShow this help message\n"
-            "\t-f,--file FILE_PATH\t\tRead input from a file\n\n"
-            "\t-c,--command\t\tRead input from the command line\n\n"
-        "If no option is included, you will be prompted for inputs from the command line.\n\n"
-    );
+            "Usage: dijkstra <option(s)> INPUT\n"
+            "Options:\n"
+            "   -h,--help             Show this help message\n"
+            "   -f,--file FILE_PATH   Read input from a file\n\n"
+            "   If no option is included, you will be prompted for inputs from the command line.\n\n"
+            );
 }
+

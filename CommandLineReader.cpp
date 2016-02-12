@@ -37,14 +37,14 @@ std::vector<Road *> CommandLineReader::promptRoadDetails(unsigned long numRoads,
     const char *optionalText = CommandLineReader::getOptionalText(optional);
     Road *temp;
     
-    printf("\tEnter the details for each road (fromCity:toCity:length):\n");
+    printf("  Enter the details for each road (fromCity:toCity:length):\n");
     
     for (int i = 0; i < numRoads; i++) {
-        printf("\t\tRoad %d: ", i);
+        printf("    Road %d: ", i);
         
         unsigned long from, to, length;
-        CommandLineReader::cleanBuffer();
         scanf("%lu:%lu:%lu", &from, &to, &length);
+        CommandLineReader::cleanBuffer();
         
         try{
             if(from > cityLimit || to > cityLimit){
@@ -60,10 +60,12 @@ std::vector<Road *> CommandLineReader::promptRoadDetails(unsigned long numRoads,
             continue;
         }
         
-        cities[temp->from]->fromRoads.push_back(temp);
-        cities[temp->to]->toRoads.push_back(temp);
+        if(!optional){
+            cities[temp->from]->fromRoads.push_back(temp);
+            cities[temp->to]->toRoads.push_back(temp);
+        }
         
-        printf("\t\t\tNew %s road from %lu to %lu with length %lu.\n", optionalText, temp->from, temp->to, temp->length);
+        printf("      New %s road from %lu to %lu with length %lu.\n", optionalText, temp->from, temp->to, temp->length);
     }
     
     return roads;
@@ -76,8 +78,8 @@ std::map<unsigned long, City *> CommandLineReader::promptCities(){
     
     do{
         printf("How many cities are in your graph?: ");
-        CommandLineReader::cleanBuffer();
         scanf("%d", &numCities);
+        CommandLineReader::cleanBuffer();
         
         if(numCities < 2){
             InputReader::logError("There must be at least 2 cities in your graph.");
@@ -89,7 +91,7 @@ std::map<unsigned long, City *> CommandLineReader::promptCities(){
         cities.insert(std::pair<int, City *>(i, temp));
     }
     
-    printf("\t%d cities (0 - %d) have been added.\n\n", numCities, numCities - 1);
+    printf("  %d cities (0 - %d) have been added.\n\n", numCities, numCities - 1);
     
     return cities;
 }
@@ -99,9 +101,9 @@ unsigned long CommandLineReader::promptRoads(bool optional){
     const char *optionalText = CommandLineReader::getOptionalText(optional);
     
     printf("How many %s roads are in your graph?: ", optionalText);
-    CommandLineReader::cleanBuffer();
     scanf("%lu", &numRoads);
-    printf("\t%lu %s roads (0 - %lu) are being added.\n\n", numRoads, optionalText, numRoads - 1);
+    CommandLineReader::cleanBuffer();
+    printf("  %lu %s roads (0 - %lu) are being added.\n\n", numRoads, optionalText, numRoads - 1);
     
     return numRoads;
 }
@@ -111,20 +113,19 @@ unsigned long CommandLineReader::promptLimit(unsigned long numCities, bool start
     
     do{
         printf("What city do you want to %s in?: ", start ? "start" : "end");
-        CommandLineReader::cleanBuffer();
         scanf("%lu", &ret);
+        CommandLineReader::cleanBuffer();
         
         if(ret > cityLimit){
             InputReader::logError("The %s city must be an integer between 0 and %lu.", start ? "start" : "end", cityLimit);
         }
     }while(ret > cityLimit);
     
-    printf("\t%sing city: %lu\n\n", start ? "Start" : "End", ret);
+    printf("  %sing city: %lu\n\n", start ? "Start" : "End", ret);
     return ret;
 }
 
 void CommandLineReader::cleanBuffer(){
-    char garbage[4096];
-    fgets(garbage, sizeof(garbage)/sizeof(char), stdin);
-    
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
 }
