@@ -1,0 +1,43 @@
+Reading 6 cities.
+  Reading city 0.
+  Reading city 1.
+  Reading city 2.
+  Reading city 3.
+  Reading city 4.
+  Reading city 5.
+Done reading cities.
+
+Reading 4 uni-directional roads.
+  Reading existing road from city 0 to city 1 with length of 2
+  Reading existing road from city 4 to city 5 with length of 2
+  Reading existing road from city 2 to city 3 with length of 2
+  Reading existing road from city 3 to city 5 with length of 2
+Done reading existing uni-directional roads.
+
+Reading 2 uni-directional roads.
+  Reading optional road from city 1 to city 4 with length of 1
+  Reading optional road from city 0 to city 2 with length of 2
+Done reading optional uni-directional roads.
+
+Starting city: 0
+Ending city: 5
+
+Calculating Shortest Path...
+
+Shortest path using existing roads:
+
+There is no path from 0 to 5 using only existing roads.
+
+
+============ PATHS MADE BY OPTIONAL ROADS BELOW =====================
+
+Paths using an optional road:
+  Path 1: 0 -> 1 -> 4 -> 5 with length 5
+  Path 2: 0 -> 2 -> 3 -> 5 with length 6
+
+
+==================== SHORTEST PATH SUMMARY BELOW ==============================
+
+2+: Optional paths 1 and 2 are shorter than the path using only existing roads.
+
+Optional path 1 is the shortest possible path and has length 5.
