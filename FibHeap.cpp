@@ -38,6 +38,7 @@ Node *FibHeap::insert(City *city, FibHeap *heap)
 
 Node *FibHeap::insert(Node *node, FibHeap *heap)
 {
+    /*
     if (heap->min == nullptr) 
     {
         heap->min = node;
@@ -47,10 +48,50 @@ Node *FibHeap::insert(Node *node, FibHeap *heap)
         *heap = *FibHeap::_meld(heap, new FibHeap(node));
     }
     return node;
+     */
+    
+    /*
+     degree[x] := 0
+     p[x] := NIL
+     child[x] := NIL
+     left[x] := x
+     right[x] := x
+     mark[x] := FALSE
+     concatenate the root list containing x with root list H
+     if min[H] = NIL or key[x]<key[min[H]]
+     then min[H] := x
+     n[H]:= n[H]+1
+     */
+    
+    node->rank = 0;
+    node->parent = nullptr;
+    node->child = nullptr;
+    node->left = node;
+    node->right = node;
+    node->mark = false;
+    
+    
+    if(heap->min != nullptr){
+        node->right = heap->min->right;
+        node->left = heap->min;
+        heap->min->right->left = node;
+        heap->min->right = node;
+        
+    }
+    else{
+        heap->min = node;
+    }
+    
+    if(heap->min == nullptr || node->distance() < heap->min->distance()){
+        heap->min = node;
+    }
+    
+    return node;
 }
 
 City *FibHeap::deleteMin(FibHeap *heap)
 {
+    /*
     std::vector<Node *> children = heap->min->getChildren();
     City *ret = heap->min->item;
     
@@ -74,11 +115,63 @@ City *FibHeap::deleteMin(FibHeap *heap)
     heap->_linkRoots();
     
     return ret;
+     */
+    
+    /*
+     z:= min[H]
+     if z <> NIL
+        then for each child x of z
+            do add x to the root list of H
+                p[x]:= NIL
+            remove z from the root list of H
+            if z = right[z]
+                then min[H]:=NIL
+                else min[H]:=right[z]
+                    CONSOLIDATE(H)
+                n[H] := n[H]-1
+     return z
+     
+     */
+    
+    std::vector<Node *> children;
+    City *ret = heap->min->item;
+    Node *currChild, *temp;
+    
+    if(heap->min != nullptr){
+        children = heap->min->getChildren();
+        heap->min->child = nullptr;
+        
+        for(auto it = children.begin(); it != children.end(); it++){
+            currChild = *it;
+            
+            currChild->parent = nullptr;
+            currChild->left = currChild;
+            currChild->right = currChild;
+            
+            FibHeap::insert(currChild, heap);
+        }
+        
+        if(heap->min == heap->min->right){
+            heap->min = nullptr;
+        }
+        else{
+            heap->min->left->right = heap->min->right;
+            heap->min->right->left = heap->min->left;
+            temp = heap->min->right;
+            heap->min->right = heap->min;
+            heap->min->left = heap->min;
+            
+            heap->min = temp;
+            heap->_linkRoots();
+        }
+    }
+    
+    return ret;
 }
 
 /*
 We implement decrease key and delete as follows:
-To cary out decrease key (A, i, h), 
+To cary out decrease key (A, i, h),
 we subtract A from the key of i, 
 find the node x containing i, 
 and cut the edge joining x to its parent p(x). 
@@ -150,14 +243,15 @@ void FibHeap::decreaseKey(unsigned long delta, Node *node, FibHeap *heap)
         then min[H] := x
      */
     
+    Node *parent = node->parent;
     node->item->distance -= delta;
     
     if(node->parent != nullptr && node->distance() < node->parent->distance()){
         FibHeap::_cut(heap, node);
-        FibHeap::_cascadingCut(heap, node->parent);
+        FibHeap::_cascadingCut(heap, parent);
     }
     
-    if (node->distance() < heap->min->distance()) {
+    if (heap->min == nullptr || node->distance() < heap->min->distance()) {
         heap->min = node;
     }
 }
@@ -172,13 +266,15 @@ void FibHeap::decreaseKey(unsigned long delta, Node *node, FibHeap *heap)
 */
 
 void FibHeap::_cut(FibHeap *heap, Node *node){
-    if(node->parent != nullptr){
-        if(node->parent->child == node){
+    Node *parent = node->parent;
+    
+    if(parent != nullptr){
+        if(parent->child == node){
             if(node->right == node){
-                node->parent->child = nullptr;
+                parent->child = nullptr;
             }
             else{
-                node->parent->child = node->right;
+                parent->child = node->right;
                 node->right->left = node->left;
                 node->left->right = node->right;
                 
@@ -187,7 +283,7 @@ void FibHeap::_cut(FibHeap *heap, Node *node){
             }
         }
         
-        node->parent->rank--;
+        parent->rank--;
     }
     
     node->mark = true;
@@ -204,6 +300,9 @@ else CUT(H, y, z)
 CASCADING-CUT(H, z)
 */
 void FibHeap::_cascadingCut(FibHeap *heap, Node *node){
+    if(node == nullptr){
+        printf("PROBLEM");
+    }
     Node *parent = node->parent;
     
     if(parent != nullptr){

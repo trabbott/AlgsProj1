@@ -69,15 +69,8 @@ DijkstraResult *Dijkstra::run(unsigned long fromId, unsigned long toId, std::map
     Road *road;
     std::vector<Road *> roads;
     
-    Node *orig = heap->min;
-    int errCount = 0;
-    
     while(heap->min != nullptr)
     {
-        errCount++;
-        if (heap->min->child == heap->min) {
-            printf("%d\n", errCount);
-        }
         minCity = heap->deleteMin(heap);
         
         if(forward){
@@ -103,11 +96,13 @@ DijkstraResult *Dijkstra::run(unsigned long fromId, unsigned long toId, std::map
                 
                 if (altDistance < neighbor->distance)
                 {
-                    unsigned long sub = neighbor->distance - altDistance;
-                    
-                    previous[neighbor->key] = minCity;
-                    distances[neighbor->key] = altDistance;
-                    FibHeap::decreaseKey(sub, cityNodes[neighbor->key], heap);
+                    if(minCity->distance != ULONG_MAX){
+                        unsigned long sub = neighbor->distance - altDistance;
+                        
+                        previous[neighbor->key] = minCity;
+                        distances[neighbor->key] = altDistance;
+                        FibHeap::decreaseKey(sub, cityNodes[neighbor->key], heap);
+                    }
                 }
             }
         }
