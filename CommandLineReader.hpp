@@ -18,6 +18,12 @@
 #include "InputReader.hpp"
 #include "Road.hpp"
 
+//============================================================================================
+// CommandLineReader
+//
+// A simple class used for parsing command line input if the user chooses to insert information
+// about their graph from the command line.
+//============================================================================================
 class CommandLineReader : InputReader{
 public:
     static InputReaderResult *read();

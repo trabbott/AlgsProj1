@@ -23,6 +23,9 @@ DijkstraResult::DijkstraResult(std::map<unsigned long, City *> previous, std::ma
 // Input:
 //  params: An InputReaderResult, used for configuring the way Dijkstra's algorithm runs.
 //
+// Output:
+//  A DijkstraResult object.
+//
 // Run Dijkstra's Algorithm from the input source to the input destination. This will give us the
 // shortest path from the input source to every node.
 //============================================================================================
@@ -35,6 +38,9 @@ DijkstraResult *Dijkstra::runForward(InputReaderResult *params){
 //
 // Input:
 //  params: An InputReaderResult, used for configuring the way Dijkstra's algorithm runs.
+//
+// Output:
+//  A DijkstraResult object.
 //
 // Run Dijkstra's Algorithm from the input destination to the input source. This will give us the
 // shortest path from the input destination to every node.
@@ -52,6 +58,9 @@ DijkstraResult *Dijkstra::runBackward(InputReaderResult *params){
 //  cities:     A vector of City objectrs representing all the cities in the graph.
 //  forward:    A boolean value indicating whether or not the algorithm should be run by following
 //              edges leading to a Node or edges leading away from that Node.
+//
+// Output:
+//  A DijkstraResult object.
 //
 // Run Dijkstra's Algorithm from the City identified by the fromId parameter to the city identified by the
 // toId parameter.

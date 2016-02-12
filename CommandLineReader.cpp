@@ -8,6 +8,17 @@
 
 #include "CommandLineReader.hpp"
 
+//============================================================================================
+// CommandLineReader::read
+//
+// Input:
+//
+// Output:
+//  An InputReaderResult object.
+//
+// This method prompts the user for all of the input necessary to create a graph to be used with
+// Dijksra's algorithm and outputs that graph.
+//============================================================================================
 InputReaderResult *CommandLineReader::read(){
     std::map<unsigned long, City *> cities = CommandLineReader::promptCities();
     unsigned long numExistingRoads, from, to;
@@ -37,6 +48,19 @@ InputReaderResult *CommandLineReader::read(){
     return new InputReaderResult(to, from, cities, optRoads);
 }
 
+//============================================================================================
+// CommandLineReader::promptRoadDetails
+//
+// Input:
+//  numRoads:   The number of roads to create.
+//  cities:     A map of city ids as the keys and City objects as the values.
+//  optional:   A boolean value indicating whether or not the roads being input are optional or mandatory.
+//
+// Output:
+//  An InputReaderResult object.
+//
+// This method prompts the user for all of the input necessary to create a graph to be used with
+// Dijksra's algorithm and outputs that graph.
 std::vector<Road *> CommandLineReader::promptRoadDetails(unsigned long numRoads, std::map<unsigned long, City *> cities, bool optional){
     std::vector<Road *> roads;
     unsigned long cityLimit = cities.size() - 1;
