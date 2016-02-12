@@ -17,6 +17,12 @@
 
 #include "City.hpp"
 
+//============================================================================================
+// InputReaderResult
+//
+//  A simple class representing the output of an InputReader (including CommandLineReader and
+//  FileReader).
+//============================================================================================
 class InputReaderResult{
 public:
     unsigned long to, from;
@@ -26,6 +32,12 @@ public:
     InputReaderResult(unsigned long to, unsigned long from, std::map<unsigned long, City *> cities, std::vector<Road *> optRoads);
 };
 
+//============================================================================================
+// InputReader
+//
+// The super class of CommandLineReader and FileReader. Contains methods for logging errors and
+// producing the appropriate text based on whether or not an input in question is optional or not.
+//============================================================================================
 class InputReader{
 protected:
     static const char* getOptionalText(bool optional);
