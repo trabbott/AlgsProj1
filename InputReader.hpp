@@ -11,6 +11,7 @@
 
 #include <map>
 #include <string>
+#include <cstdarg>
 #include <vector>
 
 #include "City.hpp"
