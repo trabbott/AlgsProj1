@@ -57,13 +57,6 @@ Node *Node::link(Node *first, Node *second){
     b->right->left = b->left;
     a->addChild(b);
     
-    if(a->parent == a || a->child == a){
-        printf("HERE");
-    }
-    
-    if(b->parent == b || b->child == b){
-        printf("HERE");
-    }
     return a;
 }
 

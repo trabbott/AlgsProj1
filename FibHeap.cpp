@@ -300,9 +300,6 @@ else CUT(H, y, z)
 CASCADING-CUT(H, z)
 */
 void FibHeap::_cascadingCut(FibHeap *heap, Node *node){
-    if(node == nullptr){
-        printf("PROBLEM");
-    }
     Node *parent = node->parent;
     
     if(parent != nullptr){

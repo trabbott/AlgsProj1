@@ -9,9 +9,10 @@
 #ifndef InputReader_hpp
 #define InputReader_hpp
 
+#include <cstdarg>
+#include <cstdio>
 #include <map>
 #include <string>
-#include <cstdarg>
 #include <vector>
 
 #include "City.hpp"

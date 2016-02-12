@@ -5,7 +5,8 @@ To compile the code simply run the make command in the root directory. This will
 ## Dependencies
 No dependencies other than the standard C/C++ libraries are required.
 
-Working on Ubuntu 14.04 with gcc version 4.8.4
+Working on Ubuntu 14.04 with gnu gcc version 4.8.4
+Working on Windows 10 with gnu gcc version 4.9.3 (run using CygWin)
 Working on Mac OS 10.11.3
 
 ## Usage
