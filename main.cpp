@@ -8,7 +8,7 @@
 
 #include <algorithm>
 #include <climits>
-#include <cstdarg> 
+#include <cstdarg>
 #include <string>
 #include <map>
 

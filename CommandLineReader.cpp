@@ -19,7 +19,13 @@ InputReaderResult *CommandLineReader::read(){
     
     //prompt for optional roads
     numExistingRoads = CommandLineReader::promptRoads(true);
-    std::vector<Road *> optRoads = CommandLineReader::promptRoadDetails(numExistingRoads, cities, true);
+    
+    std::vector<Road *> optRoads;
+    
+    if(numExistingRoads > 0){
+        optRoads = CommandLineReader::promptRoadDetails(numExistingRoads, cities, true);
+    }
+    
     printf("\n");
     
     from = CommandLineReader::promptLimit(cities.size(), true);
@@ -103,7 +109,11 @@ unsigned long CommandLineReader::promptRoads(bool optional){
     printf("How many %s roads are in your graph?: ", optionalText);
     scanf("%lu", &numRoads);
     CommandLineReader::cleanBuffer();
-    printf("  %lu %s roads (0 - %lu) are being added.\n\n", numRoads, optionalText, numRoads - 1);
+    
+    if(numRoads == ULONG_MAX){
+        numRoads = 0;
+        printf("  %lu %s roads (0 - %lu) are being added.\n\n", numRoads, optionalText, numRoads - 1);
+    }
     
     return numRoads;
 }
