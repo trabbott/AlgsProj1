@@ -57,10 +57,11 @@ InputReaderResult *CommandLineReader::read(){
 //  optional:   A boolean value indicating whether or not the roads being input are optional or mandatory.
 //
 // Output:
-//  An InputReaderResult object.
+//  A vector of Road objects.
 //
-// This method prompts the user for all of the input necessary to create a graph to be used with
-// Dijksra's algorithm and outputs that graph.
+// This method prompts the user for details concerning the edges of the graph.  The edges can be either optional
+// or mandatory as indicated by the optional flag.
+//============================================================================================
 std::vector<Road *> CommandLineReader::promptRoadDetails(unsigned long numRoads, std::map<unsigned long, City *> cities, bool optional){
     std::vector<Road *> roads;
     unsigned long cityLimit = cities.size() - 1;
@@ -104,6 +105,17 @@ std::vector<Road *> CommandLineReader::promptRoadDetails(unsigned long numRoads,
     return roads;
 }
 
+//============================================================================================
+// CommandLineReader::promptCities
+//
+// Input:
+//
+// Output:
+//  A map with city ids as keys and City objects as values.
+//
+// This method prompts the user for the number of nodes in the graph and creates City items
+// that are inserted into each of those nodes.
+//============================================================================================
 std::map<unsigned long, City *> CommandLineReader::promptCities(){
     std::map<unsigned long, City *> cities;
     City *temp;
@@ -129,6 +141,17 @@ std::map<unsigned long, City *> CommandLineReader::promptCities(){
     return cities;
 }
 
+//============================================================================================
+// CommandLineReader::promptRoads
+//
+// Input:
+//  optional:   A boolean value indicating whether or not the roads being input are optional or mandatory.
+//
+// Output:
+//  An integer indicating how many roads are to be added.
+//
+// This method prompts the user for the number of roads that will follow as input.
+//============================================================================================
 unsigned long CommandLineReader::promptRoads(bool optional){
     unsigned long numRoads;
     const char *optionalText = CommandLineReader::getOptionalText(optional);
@@ -145,6 +168,18 @@ unsigned long CommandLineReader::promptRoads(bool optional){
     return numRoads;
 }
 
+//============================================================================================
+// CommandLineReader::promptLimit
+//
+// Input:
+//  numCities:  The total number of cities in the graph.
+//  start:      A boolean indicating whether the current limit is the start or end.
+//
+// Output:
+//  An integer representing the city id of the starting or ending City object.
+//
+// This method prompts the user for details concerning the source or target of Dijkstra's algorithm.
+//============================================================================================
 unsigned long CommandLineReader::promptLimit(unsigned long numCities, bool start){
     unsigned long ret, cityLimit = numCities - 1;
     
@@ -162,6 +197,15 @@ unsigned long CommandLineReader::promptLimit(unsigned long numCities, bool start
     return ret;
 }
 
+//============================================================================================
+// CommandLineReader::cleanBuffer
+//
+// Input:
+//
+// Output:
+//
+// A simply utiltiy for clearing the scanf buffer between user inputs.
+//============================================================================================
 void CommandLineReader::cleanBuffer(){
     int c;
     while ((c = getchar()) != '\n' && c != EOF) {}
